@@ -57,7 +57,7 @@ CREATE TABLE turma(
 CREATE TABLE avaliacao(
     idAvaliacao BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     comentario VARCHAR(240),
-    nota ENUM("MINGUÉ", "TRANQUILO", "MÉDIO", "TRABALHOSO", "FOGE") NOT NULL,
+    nota ENUM("MIGUÉ", "TRANQUILO", "MÉDIO", "TRABALHOSO", "FOGE") NOT NULL,
     dificuldade ENUM("MUITO FÁCIL", "FÁCIL", "MÉDIO", "DIFÍCIL", "MUITO DIFÍCIL") NOT NULL,
     fk_matricula VARCHAR(9) NOT NULL,
     fk_idProfessor BIGINT NOT NULL,
@@ -78,4 +78,3 @@ CREATE TABLE denuncia(
     FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula),
     FOREIGN KEY (fk_idAvaliacao) REFERENCES avaliacao(idAvaliacao)
 );
-

@@ -20,7 +20,8 @@ INSERT INTO departamento VALUES(
     "300", "SERIE C"
 );
 
--- disciplina
+-- disciplina 
+
 INSERT INTO disciplina VALUES(
     "MAT0029", "CÁLCULO 4", "518"
 );
@@ -64,7 +65,7 @@ INSERT INTO turma VALUES(
 
 -- avaliacao
 INSERT INTO avaliacao VALUES (
-    1, "Excelente pofexo", "MIGUE", "MUITO FÁCIL", "190119233", "2", "2023.1", "CENTRO OLIMPICO", "35T45"
+    1, "Excelente pofexo", "MIGUÉ", "MUITO FÁCIL", "190119233", "2", "2023.1", "CENTRO OLIMPICO", "35T45"
 );
 INSERT INTO avaliacao VALUES (
     2, "Horrivel esse m#$%@", "FOGE", "MUITO DIFÍCIL", "231005138", "3", "2023.1", "ICC ANF. 1", "35T45"
