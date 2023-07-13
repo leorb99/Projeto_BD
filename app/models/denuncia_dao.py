@@ -19,6 +19,14 @@ class DenunciaDAO():
         except Error as ex:
             print("Falha ao atualizar dados na tabela denúncia: ", ex)
     
+    def delete(self, cursor, idDenuncia):
+        sql = ("DELETE FROM denuncia WHERE idDenuncia=%s;")
+        try:
+            cursor.execute(sql, (idDenuncia,))
+            app.models.con.commit()
+        except Error as ex:
+            print("Falha ao deletar dados na tabela denuncia: ", ex)
+    
     def get(self, cursor, idAvaliacao):
         sql = "SELECT * FROM denuncia WHERE idAvaliacao=%s;"
         try:

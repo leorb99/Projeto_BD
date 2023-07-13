@@ -23,7 +23,7 @@ INSERT INTO departamento VALUES(
 );
 
 -- disciplina 
-/* INSERT INTO disciplina VALUES(
+INSERT INTO disciplina VALUES(
     "MAT0029", "CÁLCULO 4", "518"
 );
 INSERT INTO disciplina VALUES(
@@ -31,7 +31,7 @@ INSERT INTO disciplina VALUES(
 );
 INSERT INTO disciplina VALUES(
     "CIC0098", "BANDO DE DADOS", "508"
-); */
+);
 INSERT INTO disciplina VALUES(
     "SRA01", "FUTEBOL 1", "100"
 );
