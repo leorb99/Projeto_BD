@@ -56,12 +56,16 @@ echo "<seu_usuario_mysql> <sua_senha_mysql>" > login.txt
 ```
 Substituindo "<seu_usuario_mysql> <sua_senha_mysql>" com seus dados de acesso ao MySQL. Esse passo é opcional, se você tiver problemas ou preferir pode apenas fazer as devidas alterações colocando seus dados de acesso nos arquivos **"feeder.py"** e **"/app/models/__init\__.py"**, e comentando o código que abre o arquivo login.txt.
 
-Com o MySQL configurado e o banco de dados criado você pode executar o programa **"feeder.py"** esse programa deve incluir algumas informações no banco de dados.
+Com o MySQL configurado e o banco de dados criado você pode executar o programa **"feeder.py"** esse programa deve incluir algumas informações no banco de dados. (Isso pode levar alguns segundos)
 
 ```
 python feeder.py
 ```
-Depois disso você pode executar o **run.py**
+Só depois de executar o **"feeder.py"** você pode executar o script **"MIGRATE.sql.py"**
+```
+mysql -u <seu_usuario_mysql> -p < MIGRATE.sql
+```
+Depois disso você pode executar o **"run.py"**
 ```
 python run.py runserver
 ```

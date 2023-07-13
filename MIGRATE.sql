@@ -1,3 +1,5 @@
+USE AvaliaUnB;
+
 -- usuario
 INSERT INTO usuario VALUES(
     "190119233", "GABRIEL BARBOSA", "gabigol_matador@hotmail.com", "umasenha", "Educação Física", "ADM", "1996-08-30", NULL, NULL
@@ -100,8 +102,3 @@ INSERT INTO denuncia VALUES(
 INSERT INTO denuncia VALUES(
     3, "NÃO AVALIADA", NULL, "190119210", 4
 );
-
-
-
-INSERT INTO usuario (matricula, nome, email, senha, curso, privilegio, dataNascimento, foto)
-VALUES ('12345', 'João', 'joao@example.com', '123456', 'CIC', 'COMUM', '1999-09-01', X'89504E470D0A1A0A0000000D49484452000000800000008008060')

@@ -1,3 +1,4 @@
+-- Active: 1689032669311@@127.0.0.1@3306@AvaliaUnB
 CREATE DATABASE AvaliaUnB;
 
 USE AvaliaUnB;
