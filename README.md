@@ -27,9 +27,9 @@ Instale as bibliotecas que estão no arquivo requirements.txt
 pip3 install -r requirements.txt
 ```
 Certifique-se de que o MySQL esteja instalado, caso não tenha instalado siga o tutorial
-[Link text here] (https://ubuntu.com/server/docs/databases-mysql)
+ [neste link](https://ubuntu.com/server/docs/databases-mysql).
 
-Para criar o banco de dados e as tabelas, execute o comando no terminal
+Para criar o banco de dados e as tabelas, execute o comando no terminal.
 ```
 mysql -u <seu_usuario_mysql> -p < CREATE.sql
 ```
