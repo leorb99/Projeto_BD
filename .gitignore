@@ -1,4 +1,7 @@
 /MR.mwb
 /*.bak
 /MER.drawio
-/app/models/login.txt
+/login.txt
+/test.py
+/config.py
+/latex/*

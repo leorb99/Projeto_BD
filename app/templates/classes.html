@@ -1,0 +1,25 @@
+<!-- turmas.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turmas</title>
+</head>
+<body>
+    <h1>Turmas</h1>
+
+    <!-- Formulário de pesquisa -->
+    <form action="/turmas" method="POST">
+        <label for="nome_professor">Pesquisar por nome do professor:</label>
+        <input type="text" id="nome_professor" name="nome_professor">
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <!-- Lista de turmas -->
+    <ul>
+        {% for turma in turmas %}
+        <li>{{ turma }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

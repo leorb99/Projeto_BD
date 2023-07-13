@@ -17,8 +17,6 @@ ON usuario
 FOR EACH ROW
 SET NEW.idade = FLOOR(DATEDIFF(CURDATE(), NEW.dataNascimento) / 365);
 
-
-
 CREATE TABLE departamento(
     codigo VARCHAR(4) NOT NULL PRIMARY KEY,
     nome VARCHAR(145) NOT NULL
@@ -28,16 +26,23 @@ CREATE TABLE disciplina(
     codigo VARCHAR(15) NOT NULL PRIMARY KEY,
     nome VARCHAR(125) NOT NULL,
     fk_codDpto VARCHAR(4) NOT NULL,
-    FOREIGN KEY (fk_codDpto) REFERENCES departamento(codigo)
+    FOREIGN KEY (fk_codDpto) REFERENCES departamento(codigo) ON DELETE CASCADE
 );
 
 CREATE TABLE professor(
-    idProfessor BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    idProfessor BIGINT AUTO_INCREMENT NOT NULL,
     nome VARCHAR(70) NOT NULL,
     fk_codDpto VARCHAR(4) NOT NULL,
-    fk_codDisciplina VARCHAR(15) NULL,
-    FOREIGN KEY (fk_codDpto) REFERENCES departamento(codigo),
-    FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo)
+    FOREIGN KEY (fk_codDpto) REFERENCES departamento(codigo) ON DELETE CASCADE,
+    PRIMARY KEY (idProfessor)
+);
+
+CREATE TABLE professor_disciplina(
+    fk_codDisciplina VARCHAR(15) NOT NULL,
+    fk_idProfessor BIGINT NOT NULL,
+    FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo),
+    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor),
+    PRIMARY KEY (fk_codDisciplina, fk_idProfessor) 
 );
 
 CREATE TABLE turma(
@@ -49,8 +54,8 @@ CREATE TABLE turma(
     totalVagas INT NULL,
     fk_idProfessor BIGINT NOT NULL,
     fk_codDisciplina VARCHAR(10) NOT NULL,
-    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor),
-    FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo),
+    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE, 
+    FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo) ON DELETE CASCADE,
     PRIMARY KEY (periodo, horario, local, fk_idProfessor)
 );
 
@@ -64,9 +69,9 @@ CREATE TABLE avaliacao(
     fk_periodo VARCHAR(6) NOT NULL,
     fk_local VARCHAR(60) NOT NULL,
 	fk_horario VARCHAR(105) NOT NULL,
-    FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula),
-    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor),
-    FOREIGN KEY (fk_periodo, fk_horario, fk_local) REFERENCES turma(periodo, horario, local)
+    FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula) ON DELETE CASCADE,
+    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE,
+    FOREIGN KEY (fk_periodo, fk_horario, fk_local) REFERENCES turma(periodo, horario, local) ON DELETE CASCADE
 );
 
 CREATE TABLE denuncia(
@@ -75,6 +80,33 @@ CREATE TABLE denuncia(
     motivo VARCHAR(240),
     fk_matricula VARCHAR(9) NOT NULL,
     fk_idAvaliacao BIGINT NOT NULL,
-    FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula),
-    FOREIGN KEY (fk_idAvaliacao) REFERENCES avaliacao(idAvaliacao)
+    FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula) ON DELETE CASCADE,
+    FOREIGN KEY (fk_idAvaliacao) REFERENCES avaliacao(idAvaliacao) ON DELETE CASCADE
 );
+
+-- view
+CREATE VIEW vw_avaliacoesDisciplina AS
+SELECT professor.nome AS nome, 
+       avaliacao.nota AS nota,
+       disciplina.nome AS nome_disciplina,
+       turma.horario AS horario,
+       turma.local AS local,
+       turma.fk_codDisciplina AS disciplina
+FROM turma
+INNER JOIN disciplina ON turma.fk_codDisciplina = disciplina.codigo
+INNER JOIN avaliacao ON turma.fk_idProfessor = avaliacao.fk_idProfessor
+INNER JOIN professor ON turma.fk_idProfessor = professor.idProfessor;
+
+-- procedure
+DELIMITER //
+CREATE PROCEDURE pr_disciplinasDoProfessor (IN nome VARCHAR(70))
+BEGIN
+        SELECT professor.nome, disciplina.nome
+        FROM professor, disciplina, professor_disciplina
+        WHERE professor.idProfessor = professor_disciplina.fk_idProfessor 
+        AND disciplina.codigo = professor_disciplina.fk_codDisciplina
+        AND professor.nome = nome;
+END//
+DELIMITER;
+
+/* DROP DATABASE AvaliaUnB */

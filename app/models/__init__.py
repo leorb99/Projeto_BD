@@ -1,7 +1,8 @@
 import mysql.connector
 import os
-here = os.path.dirname(os.path.abspath(__file__))
-filename = os.path.join(here, 'login.txt')
+
+path_login = os.path.dirname(os.path.abspath(__file__)) + "/../../"
+filename = os.path.join(path_login, 'login.txt')
 
 with open(filename, "r") as f:
     user, password = f.readline().split()

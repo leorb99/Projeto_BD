@@ -1,0 +1,85 @@
+<!-- editar_avaliacao.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Avaliação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 300px;
+            height: 100px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        select,
+        input[type="text"] {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button[type="submit"],
+        button[type="button"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Avaliação</h1>
+    <form action="/atualizar-avaliacao" method="POST">
+        <div>
+            <label for="comentario">Comentário:</label>
+            <textarea id="comentario" name="comentario" rows="5" cols="50">{{ avaliacao.comentario }}</textarea>
+        </div>
+        <div>
+            <label for="nota">Nota:</label>
+            <select id="nota" name="nota">
+                <option value="MIGUÉ">MIGUÉ</option>
+                <option value="TRANQUILO">TRANQUILO</option>
+                <option value="MÉDIO">MÉDIO</option>
+                <option value="TRABALHOSO">TRABALHOSO</option>
+                <option value="FOGE">FOGE</option>
+            </select>
+        </div>
+        <div>
+            <label for="dificuldade">Dificuldade:</label>
+            <select id="dificuldade" name="dificuldade">
+                <option value="MUITO FÁCIL">MUITO FÁCIL</option>
+                <option value="FÁCIL">FÁCIL</option>
+                <option value="MÉDIO">MÉDIO</option>
+                <option value="DIFÍCIL">DIFÍCIL</option>
+                <option value="MUITO DIFÍCIL">MUITO DIFÍCIL</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Atualizar Avaliação</button>
+            <button type="button" onclick="confirmarExclusao()">Excluir Avaliação</button>
+        </div>
+    </form>
+
+    <script>
+        function confirmarExclusao() {
+            if (confirm('Tem certeza que deseja excluir esta avaliação?')) {
+                window.location.href = "/excluir-avaliacao";
+            }
+        }
+    </script>
+</body>
+</html>
+	

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Avalia UnB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function redirecionarParaLogin() {
+            window.location.href = "/login";
+        }
+
+        function redirecionarParaSignup() {
+            window.location.href = "/signup";
+        }
+    </script>
+</head>
+<body>
+    <h1>Avalia UnB</h1>
+    <div class="button-container">
+        <button onclick="redirecionarParaLogin()">Login</button>
+        <button onclick="redirecionarParaSignup()">Signup</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .profile-info {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .profile-info .form-group {
+            margin-bottom: 10px;
+        }
+        .profile-info .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .profile-info .form-group span {
+            display: block;
+            margin-top: 5px;
+        }
+        .profile-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .profile-search {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-search input[type="text"] {
+            width: 300px;
+            padding: 5px;
+        }
+        .profile-search button {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        function profile_update() {
+            window.location.href = "/profile/update";
+        }
+
+        function classes_rate() {
+            window.location.href = "/classes/rate";
+        }
+
+        function classes_add() {
+            window.location.href = "/classes/add";
+        }
+    </script>
+</head>
+<body>
+    <h1>Perfil {{ user.nome }}</h1>
+    <div class="profile-info">
+        <div class="form-group">
+            <label for="matricula">Matrícula:</label>
+            <span id="matricula">{{ user.matricula }}</span>
+        </div>
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <span id="nome">{{ user.nome }}</span>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <span id="email">{{ user.email }}</span>
+        </div>
+        <div class="form-group">
+            <label for="curso">Curso:</label>
+            <span id="curso">{{ user.curso }}</span>
+        </div>
+        <div class="form-group">
+            <label for="foto">Foto:</label>
+            <img src="data:image/png;base64,{{ user.foto }}" alt="Foto do usuário">
+        </div>
+    </div>
+    <div class="profile-buttons">
+        <button onclick="profile_update()">Editar Perfil</button>
+        <button onclick="classes_rate()">Escrever Avaliação</button>
+        <button onclick="classes_add()">Adicionar Turma</button>
+    </div>
+</body>
+</html>

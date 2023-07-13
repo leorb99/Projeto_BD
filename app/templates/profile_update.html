@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Perfil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 5px;
+        }
+        .form-group button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Perfil</h1>
+    <div class="form-container">
+        <form action="/profile/update" method="post">
+            <div class="form-group">
+                <label for="matricula">Matrícula:</label>
+                <input type="text" id="matricula" name="matricula" value="{{ user.matricula }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" value="{{ user.nome }}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" value="{{ user.senha }}">
+            </div>
+            <div class="form-group">
+                <label for="curso">Curso:</label>
+                <input type="text" id="curso" name="curso" value="{{ user.curso }}">
+            </div>
+            <div class="form-group">
+                <button type="submit" formaction="/profile/update">Atualizar</button>
+            </div>
+            <div class="form-group">
+                <button type="submit" formaction="/delete-account">Excluir Conta</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

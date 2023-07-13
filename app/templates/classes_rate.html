@@ -1,0 +1,85 @@
+<!-- avaliacao.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Escrever Avaliação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        select,
+        input[type="text"],
+        textarea {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Escrever Avaliação</h1>
+    <form action="/classes/rate" method="POST">
+        <div>
+            <label for="comentario">Comentário:</label>
+            <textarea id="comentario" name="comentario" rows="5" cols="50"></textarea>
+        </div>
+        <div>
+            <label for="nota">Nota:</label>
+            <select id="nota" name="nota">
+                <option value="MIGUÉ">MIGUÉ</option>
+                <option value="TRANQUILO">TRANQUILO</option>
+                <option value="MÉDIO">MÉDIO</option>
+                <option value="TRABALHOSO">TRABALHOSO</option>
+                <option value="FOGE">FOGE</option>
+            </select>
+        </div>
+        <div>
+            <label for="dificuldade">Dificuldade:</label>
+            <select id="dificuldade" name="dificuldade">
+                <option value="MUITO FÁCIL">MUITO FÁCIL</option>
+                <option value="FÁCIL">FÁCIL</option>
+                <option value="MÉDIO">MÉDIO</option>
+                <option value="DIFÍCIL">DIFÍCIL</option>
+                <option value="MUITO DIFÍCIL">MUITO DIFÍCIL</option>
+            </select>
+        </div>
+        <div>
+            <label for="fk_idProfessor">Nome do Professor:</label>
+            <input type="text" id="fk_idProfessor" name="fk_idProfessor">
+        </div>
+        <div>
+            <label for="fk_periodo">Período:</label>
+            <input type="text" id="fk_periodo" name="fk_periodo">
+        </div>
+        <div>
+            <label for="fk_local">Local:</label>
+            <input type="text" id="fk_local" name="fk_local">
+        </div>
+        <div>
+            <label for="fk_horario">Horário:</label>
+            <input type="text" id="fk_horario" name="fk_horario">
+        </div>
+        <div>
+            <button type="submit">Enviar Avaliação</button>
+        </div>
+    </form>
+</body>
+</html>

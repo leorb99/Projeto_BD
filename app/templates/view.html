@@ -1,0 +1,35 @@
+<!-- view.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View</title>
+</head>
+<body>
+    <h1>View</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Coluna 1</th>
+                <th>Coluna 2</th>
+                <th>Coluna 3</th>
+                <th>Coluna 4</th>
+                <th>Coluna 5</th>
+                <th>Coluna 6</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
