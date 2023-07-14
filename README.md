@@ -10,7 +10,10 @@ Antes de tudo, clone o repositório
 git clone https://github.com/leorb99/Projeto_BD
 
 ```
-Recomendo que instale o virtualenv
+Recomendo que instale o virtualenv, mas antes certifique-se de que tem o pip3 instalado, caso não tenha instale com
+```
+sudo apt install python3-pip
+```
 ```
 pip3 install virtaulenv
 ```
@@ -46,7 +49,6 @@ SHOW DATABASES;
 AvaliaUnB deve aparecer entre os databases
 ```
 USE AvaliaUnB;
-SHOW DATABASES;
 ```
 Assim você deve conseguir ver as tabelas do banco de dados.
 

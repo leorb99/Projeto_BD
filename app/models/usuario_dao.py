@@ -4,18 +4,23 @@ from app.controllers import usuarios
 
 class UsuarioDAO():
     def create(self, cursor, usuario, foto):
-        sql = (f"""INSERT INTO usuario VALUES("{usuario['matricula']}", "{usuario['nome']}", "{usuario['email']}", "{usuario['senha']}", "{usuario['curso']}", "{usuario['privilegio']}", "{usuario['dataNascimento']}", NULL, {foto});""")
+        sql = """INSERT INTO usuario 
+                (matricula, nome, email, senha, curso, privilegio, dataNascimento, foto) 
+                VALUES(%s, %s, %s, %s, %s, %s, %s, %s);"""
         try:
-            cursor.execute(sql)
+            insert = (usuario.matricula, usuario.nome, usuario.email, usuario.senha, 
+                      usuario.curso, usuario.privilegio, usuario.dataNascimento, foto)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Exception as ex:
             print("Falha ao inserir dados na tabela usuários: ", ex)
 
-    def update(self, cursor, usuario):
-        sql = (f"""UPDATE usuario SET nome="{usuario['nome']}", email="{usuario['email']}", senha="{usuario['senha']}", curso="{usuario['curso']}" """
-               f"""WHERE matricula="{usuario['matricula']}";""")
+    def update(self, cursor, usuario, foto):
+        sql = ("""UPDATE usuario SET nome=%s, email=%s, senha=%s, curso=%s, foto=%s
+               WHERE matricula=%s;""")
         try:
-            cursor.execute(sql)
+            insert = (usuario.nome, usuario.email, usuario.senha, usuario.curso, foto, usuario.matricula)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao atualizar dados na tabela usuários: ", ex)

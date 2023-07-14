@@ -15,27 +15,24 @@
             text-align: center;
             margin-top: 20px;
         }
-        .button-container button {
+        .button-container a {
+            display: inline-block;
             padding: 10px 20px;
             font-size: 16px;
             margin-right: 10px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #663399;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
-    <script>
-        function redirecionarParaLogin() {
-            window.location.href = "/login";
-        }
-
-        function redirecionarParaSignup() {
-            window.location.href = "/signup";
-        }
-    </script>
 </head>
 <body>
     <h1>Avalia UnB</h1>
     <div class="button-container">
-        <button onclick="redirecionarParaLogin()">Login</button>
-        <button onclick="redirecionarParaSignup()">Signup</button>
+        <a href="/login">Login</a>
+        <a href="/signup">Signup</a>
     </div>
 </body>
 </html>

@@ -1,9 +1,18 @@
+import base64
+import os
 from app import app
 from flask import render_template, request, redirect
 from . import avaliacoes, denuncias, departamentos, disciplinas, professor_disciplina, professores, turmas, usuarios
 from app.models import con, cursor, avaliacao_dao, usuario_dao, professor_disciplina_dao
 from app.models import departamente_dao, disciplina_dao, professor_dao, denuncia_dao, turma_dao
-import json
+
+
+def convertImageToBinary(img):
+    with open(os.path.dirname(os.path.abspath(__file__)) + img, "rb") as f_img:
+        binary = f_img.read()
+    return binary
+
+foto = convertImageToBinary("/../../images/generic_user.png")
 
 user = usuarios.Usuario()
 rate = avaliacoes.Avaliacao()
@@ -33,6 +42,8 @@ def login(usr=user):
             if usr.privilegio == "ADM":
                 return redirect("profile_adm")
             return redirect("profile")
+        elif usr.get_usr(matricula) is None:
+            return render_template("login.html", error="Usuário não cadastrado.")
         else:
             return render_template("login.html", error="Senha incorreta.")
     else:
@@ -43,10 +54,13 @@ def signup(usr=user):
     if request.method == "POST":
         matricula = request.form["matricula"]
         usr = usr.get_usr(matricula)
-        if usr == None:
+        if usr is None:
             usuario = request.form
             foto = request.files["foto"]
             foto_bin = foto.read()
+            user.foto = foto_bin
+            if not foto:
+                user.foto = convertImageToBinary("/../../images/generic_user.png")
             user.matricula = matricula
             user.nome = usuario["nome"]
             user.email = usuario["email"]
@@ -55,30 +69,70 @@ def signup(usr=user):
             user.privilegio = usuario["privilegio"]
             user.dataNascimento = usuario["dataNascimento"]
             create_user = usuario_dao.UsuarioDAO()
-            create_user.create(cursor, usuario, foto_bin)
+            create_user.create(cursor, user, foto_bin)
             return redirect("profile")
-        else:
-            return render_template("login.html", error="Usuário já cadastrado.")
+        return render_template("login.html", error="Usuário já cadastrado.")
     else:
         return render_template("signup.html")
 
 @app.route("/profile", methods=["GET", "POST"])
-def profile():  # editar, excluir    
-    return render_template("profile.html", user=user)
+def profile(foto=foto):
+    if not user.foto:
+        user.foto = foto
+        base64_data = base64.b64encode(foto).decode('utf-8')
+        return render_template("profile.html", user=user, base64_data=base64_data)
+    base64_data = base64.b64encode(user.foto).decode('utf-8')
+    return render_template("profile.html", user=user, base64_data=base64_data)
 
-@app.route("/profile_adm", methods=["GET"])
-def profile_adm():  # editar, excluir
-    return render_template("profile_adm.html", user=user)
-    
+@app.route("/profile_adm", methods=["GET", "POST"])
+def profile_adm(foto=foto):
+    if not user.foto:
+        user.foto = foto
+        base64_data = base64.b64encode(foto).decode('utf-8')
+        return render_template("profile_adm.html", user=user, base64_data=base64_data)
+    base64_data = base64.b64encode(user.foto).decode('utf-8')
+    return render_template("profile_adm.html", user=user, base64_data=base64_data)
+
 @app.route("/profile/update", methods=["GET", "POST"])
-def profile_update(usr=user):
+def profile_update(foto=foto):
+    base64_data = base64.b64encode(user.foto).decode('utf-8')
     if request.method == "POST":
-        usuario = request.form
-        update_user = usuario_dao.UsuarioDAO()
-        update_user.update(cursor, usuario)
+        if not user.foto:
+            base64_data = base64.b64encode(foto).decode('utf-8')
+            return render_template("profile_update.html", user=user, base64_data=base64_data)
         return redirect("/profile")
     else:
-        return render_template("profile_update.html", user=user)
+        return render_template("profile_update.html", user=user,  base64_data=base64_data)
+
+@app.route("/profile/update/adm", methods=["GET", "POST"])
+def profile_update_adm(foto=foto):
+    base64_data = base64.b64encode(user.foto).decode('utf-8')
+    if request.method == "POST":
+        if not user.foto:
+            base64_data = base64.b64encode(foto).decode('utf-8')
+            return render_template("profile_update_adm.html", user=user, base64_data=base64_data)
+        return redirect("/profile_adm")
+    else:
+        return render_template("profile_update.html", user=user, base64_data=base64_data)
+
+@app.route("/user/update", methods=["GET", "POST"])
+def user_update():
+    if request.method == "POST":
+        usuario = request.form
+        user.nome = usuario["nome"]
+        user.email = usuario["email"]
+        user.senha = usuario["senha"]
+        user.curso = usuario["curso"]
+        foto = request.files["foto"]
+        foto_bin = foto.read()
+        if foto.filename == "":
+            foto_bin = user.foto
+        user.foto = foto_bin
+        update_user = usuario_dao.UsuarioDAO()
+        update_user.update(cursor, user, foto_bin)
+        if user.privilegio == "ADM":
+            return redirect("/profile_adm")
+        return redirect("/profile")
 
 @app.route("/delete-account", methods=["POST"])
 def delete_account():

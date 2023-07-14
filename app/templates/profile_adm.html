@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Perfil Admin</title>
+    <title>Perfil</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,47 +30,26 @@
             text-align: center;
             margin-top: 20px;
         }
-        .profile-buttons button {
+        .profile-buttons a {
+            display: inline-block;
             padding: 10px 20px;
             font-size: 16px;
             margin-right: 10px;
-        }
-        .profile-search {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .profile-search input[type="text"] {
-            width: 300px;
-            padding: 5px;
-        }
-        .profile-search button {
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-        .admin-section {
-            margin-top: 40px;
-            padding: 20px;
-            border: 1px solid #ccc;
-        }
-        .admin-section h2 {
-            margin-top: 0;
-        }
-        .admin-section ul {
-            list-style: none;
-            padding: 0;
-        }
-        .admin-section ul li {
-            margin-bottom: 10px;
-        }
-        .admin-section ul li button {
-            padding: 5px 10px;
-            font-size: 14px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #663399;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Perfil {{ user.nome }}</h1>
+    <h1>{{ user.nome }}</h1>
     <div class="profile-info">
+        <div class="form-group">
+            <label for="foto"></label>
+            <img src="data:image/png;base64,{{ base64_data }}" alt="Foto do usuário">
+        </div>
         <div class="form-group">
             <label for="matricula">Matrícula:</label>
             <span id="matricula">{{ user.matricula }}</span>
@@ -89,26 +68,21 @@
         </div>
     </div>
     <div class="profile-buttons">
-        <button onclick="editarPerfil()">Editar Perfil</button>
-        <button onclick="escreverAvaliacao()">Escrever Avaliação</button>
-        <button onclick="adicionarTurma()">Adicionar Turma</button>
-    </div>
-    <div class="profile-search">
-        <input type="text" id="professor-search" placeholder="Pesquisar por professor">
-        <button onclick="pesquisarProfessor()">Pesquisar</button>
+        <a href="/profile/update/adm">Editar Perfil</a>
+        <a href="/classes/rate">Escrever Avaliação</a>
+        <a href="/classes/add">Adicionar Turma</a>
     </div>
     <div class="admin-section">
         <h2>Denúncias</h2>
         <ul>
             <li>
                 <span>Denúncia 1</span>
-                <button onclick="excluirDenuncia()">Excluir</button>
+                <a onclick="excluirDenuncia()">Excluir</a>
             </li>
             <li>
                 <span>Denúncia 2</span>
-                <button onclick="excluirDenuncia()">Excluir</button>
+                <a onclick="excluirDenuncia()">Excluir</a>
             </li>
-            <!-- Mais denúncias -->
         </ul>
     </div>
 </body>

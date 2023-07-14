@@ -18,12 +18,22 @@ class Usuario():
     def valida_senha(self, matricula, senha):
         self.usr_dao = usuario_dao.UsuarioDAO()
         senha_correta = self.usr_dao.get_pass(cursor, matricula)
-        return senha == senha_correta[0]
+        return (senha == senha_correta[0]) if senha_correta else None
     
     def get_usr(self, matricula):
         self.usr_dao = usuario_dao.UsuarioDAO()
         Usuario = self.usr_dao.get(cursor, matricula)
         return Usuario
-    
-    def to_dict(self):
-            return self.__dict__
+
+    def __json__(self):
+        return {
+            "matricula": self.matricula,
+            "nome": self.nome,
+            "email":self.email,
+            "senha":self.senha,
+            "curso":self.curso,
+            "privilegio":self.privilegio,
+            "dataNascimento":self.dataNascimento,
+            "idade":self.idade,
+            "foto":self.foto
+        }
