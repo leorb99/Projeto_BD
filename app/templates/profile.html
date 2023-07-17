@@ -41,6 +41,44 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .admin-section {
+            margin-top: 20px;
+        }
+        .admin-section h2 {
+            margin-bottom: 10px;
+        }
+        .admin-section ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .admin-section li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .admin-section li span {
+            font-weight: bold;
+        }
+        .admin-section li a {
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #c51212;
+            border-radius: 5px;
+        }
+        #ignore-opt {
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #663399;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -69,8 +107,38 @@
     </div>
     <div class="profile-buttons">
         <a href="/profile/update">Editar Perfil</a>
-        <a href="/classes/rate">Escrever Avaliação</a>
-        <a href="/classes/add">Adicionar Turma</a>
+        <a href="/classes">Ver Turmas</a>
+        <a href="/classes/add">Adicionar Turma</a>      
+        <a href="/view">Turmas Avaliadas</a>
+    </div>
+    <div class="admin-section">
+        <h2>Minhas Avaliações</h2>
+        <ul>
+            {% for avaliacao in avaliacoes %}
+            <li>
+                <p>
+                    <strong>Comentário:</strong> {{ avaliacao.comentario }}
+                </p>
+                <p>
+                    <strong>Nota:</strong> {{ avaliacao.nota }}
+                </p>
+                <p>
+                    <strong>Dificuldade:</strong> {{ avaliacao.dificuldade }}
+                </p>
+                <p>
+                    <strong>Professor:</strong> {{ avaliacao.professor }}
+                </p>
+                <p>
+                    <strong>Disciplina:</strong> {{ avaliacao.disciplina }}
+                </p>
+                <p>
+                    <strong>Período:</strong> {{ avaliacao.fk_periodo }}
+                </p>
+                <a id="ignore-opt" href="/classes/rate/update/rate_id={{ avaliacao.id }}">Editar Avaliação</a>
+                <a href="/delete_comment/rate_id={{ avaliacao.id }}">Excluir Avaliação</a>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </body>
 </html>

@@ -1,25 +1,132 @@
-<!-- turmas.html -->
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Turmas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        select,
+        input[type="text"],
+        textarea {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .submit-button {
+            margin-top: 10px;
+            width: 104%;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #663399;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: separate;
+            border-spacing: 10px;
+        }
+        .btn-column {
+            text-align: center;
+        }
+        .btn-column a {
+            padding: 5px 10px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #663399;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-column {
+            text-align: center;
+        }
+        .search-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-form input[type="text"] {
+            width: 300px;
+            padding: 5px;
+        }
+        .search-form button[type="submit"] {
+            padding: 5px 10px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #663399;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Turmas</h1>
-
-    <!-- Formulário de pesquisa -->
-    <form action="/turmas" method="POST">
-        <label for="nome_professor">Pesquisar por nome do professor:</label>
-        <input type="text" id="nome_professor" name="nome_professor">
-        <button type="submit">Pesquisar</button>
-    </form>
-
-    <!-- Lista de turmas -->
-    <ul>
-        {% for turma in turmas %}
-        <li>{{ turma }}</li>
-        {% endfor %}
-    </ul>
+    <div class="profile-search">
+        <div class="search-form">
+            <form action="/classes_search" method="GET">
+                <input type="text" name="codigo" placeholder="Digite o código da disciplina">
+                <button type="submit" href="/classes_search/codigo={{ codigo }}">Pesquisar</button>
+            </form>
+        </div>
+        <div id="turmas-list">
+            {% if turmas %}
+            <h2>{{nome_disciplina}}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Código da Disciplina</th>
+                        <th>Período</th>
+                        <th>Professor</th>
+                        <th>Horário</th>
+                        <th>Vagas Ocupadas</th>
+                        <th>Vagas Ofertadas</th>
+                        <th>Local</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for turma in turmas %}
+                    <tr>
+                        <td>{{ turma.numero }}</td>
+                        <td>{{ turma.fk_codDisciplina }}</td>
+                        <td>{{ turma.periodo }}</td>
+                        <td>{{ turma.professor }}</td>
+                        <td>{{ turma.horario }}</td>
+                        <td>{{ turma.vagasOcupadas }}</td>
+                        <td>{{ turma.totalVagas }}</td>
+                        <td>{{ turma.local }}</td>
+                        <td class="btn-column">
+                            <a href="/classes_info/?periodo={{ turma.periodo }}&horario={{ turma.horario }}&local={{ turma.local }}&idProfessor={{ turma.fk_idProfessor }}">Avaliar</a>
+                        </td>        
+                        <td class="btn-column">
+                            <a href="/rates/?periodo={{ turma.periodo }}&horario={{ turma.horario }}&local={{ turma.local }}&idProfessor={{ turma.fk_idProfessor }}">Ver Avaliações</a>
+                        </td>        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+            {% endif %}
+        </div>
+    </div>   
 </body>
 </html>

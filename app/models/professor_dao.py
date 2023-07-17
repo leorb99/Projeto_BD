@@ -4,7 +4,7 @@ from app.controllers import professores
 
 class ProfessorDAO():
     def create(self, cursor, professor):
-        sql = (f"""INSERT INTO professor VALUES("{professor['nome']}", "{professor['fk_codDpto']}");""")
+        sql = (f"""INSERT INTO professor VALUES("{professor['nome']}");""")
         try:
             cursor.execute(sql)
             app.models.con.commit()
@@ -20,9 +20,9 @@ class ProfessorDAO():
             return professor
         except Error as ex:
             print("Falha ao localizar dados na tabela professor: ", ex)
-    
-    def getNomeProf(self, cursor, nome):
-        sql = "SELECT * FROM professor WHERE nome=%s;"
+            
+    def getID(self, cursor, nome):
+        sql = "SELECT idProfessor FROM professor WHERE nome=%s;"
         try:
             cursor.execute(sql, (nome,))
             result = cursor.fetchone()

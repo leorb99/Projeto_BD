@@ -29,7 +29,7 @@ class DisciplinaDAO():
             return disciplina
         except Error as ex:
             print("Falha ao localizar dados na tabela disciplina: ", ex)
-
+            
     def getAll(self, cursor):
         sql = "SELECT * FROM disciplina;"
         try:
@@ -40,3 +40,11 @@ class DisciplinaDAO():
         except Error as ex:
             print("Falha ao localizar dados na tabela disciplina: ", ex) 
     
+    def getNome(self, cursor, codigo):
+        sql = "SELECT nome FROM disciplina WHERE codigo=%s;"
+        try:
+            cursor.execute(sql, codigo)
+            result = cursor.fetchone()
+            return result
+        except Error as ex:
+            print("Falha ao localizar dados na tabela disciplina: ", ex)

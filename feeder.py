@@ -2,13 +2,30 @@ import mysql.connector
 from mysql.connector import Error
 import os
 import csv
+import time
+import pickle
 
+init = time.time()
 here = os.path.dirname(os.path.abspath(__file__))
 filename = os.path.join(here, 'login.txt')
 
 with open(filename, "r") as f:
     user, password = f.readline().split()
-row_count = 0
+
+dep = {}
+disc = {}
+profs = {}
+turmas_dict = {}
+profs_disc = {}
+deps_prof = {}
+path_dep = here + "/data/dep.pk1"
+path_disc = here + "/data/disc.pk1"
+path_profs = here + "/data/profs.pk1"
+path_turmas_dict = here + "/data/turmas.pk1"
+path_profs_disc = here + "/data/profs_disc.pk1"
+path_deps_prof = here + "/data/deps_prof.pk1"
+
+
 try:
     con = mysql.connector.connect(
         host="localhost",
@@ -16,58 +33,81 @@ try:
         password=password,
         database="AvaliaUnB"
         )
+    
     if con.is_connected():
-        departamentos = here + "/data/2023.1/departamentos_2023-1.csv"
-        disciplinas = here + "/data/2023.1/disciplinas_2023-1.csv"
-        turmas = here + "/data/2023.1/turmas_2023-1.csv"
         cursor = con.cursor()
 
-        with open(departamentos, "r") as f_dptos:
-            dptos = csv.reader(f_dptos)
-            next(dptos)
-            for line in dptos:
-                codigo, nome = line[0], line[1]
-                row_count += 1
-                insert = f"""INSERT INTO departamento VALUES ("{codigo}", "{nome}");"""
-                # print(insert)
-                cursor.execute(insert)
-                con.commit()
-    
-    
-        with open(disciplinas, "r") as f_disciplinas:
-            disciplinas = csv.reader(f_disciplinas)
-            next(disciplinas)
-            for line in disciplinas:
-                row_count += 1
-                codigo, nome, cod_dpto = line[0], line[1], line[2]
-                insert = f"""INSERT INTO disciplina VALUES ("{codigo}", "{nome}", "{cod_dpto}")"""
-                # print(insert)
-                cursor.execute(insert)
-                con.commit()
+        with open(path_dep, "rb") as pf:
+            dep = pickle.load(pf)
+        with open(path_disc, "rb") as pf:
+            disc = pickle.load(pf)
+        with open(path_profs, "rb") as pf:
+            profs = pickle.load(pf)
+        with open(path_deps_prof, "rb") as pf:
+            deps_prof = pickle.load(pf)
+        with open(path_profs_disc, "rb") as pf:
+            profs_disc = pickle.load(pf)
+        with open(path_turmas_dict, "rb") as pf:
+            turmas_dict = pickle.load(pf)
+        
+        # with open("dep.pk1", "wb") as pf:
+        #     pickle.dump(dep, pf)
+        # with open("disc.pk1", "wb") as pf:
+        #     pickle.dump(disc, pf)
+        # with open("profs.pk1", "wb") as pf:
+        #     pickle.dump(profs, pf)
+        # with open("deps_prof.pk1", "wb") as pf:
+        #     pickle.dump(deps_prof, pf)
+        # with open("profs_disc.pk1", "wb") as pf:
+        #     pickle.dump(profs_disc, pf)
+        # with open("turmas.pk1", "wb") as pf:
+        #     pickle.dump(turmas_dict, pf)
+        
+        print("Inserindo dados na tabela departamento")
+        for d in dep.items():
+            insert = f"""INSERT INTO departamento VALUES ("{d[0]}", "{d[1]}");"""
+            cursor.execute(insert)
+            con.commit()
+        
+        print("Inserindo dados na tabela disciplina")
+        for d in disc.items():
+            insert = f"""INSERT INTO disciplina VALUES ("{d[0]}", "{d[1][0]}", "{d[1][1]}");"""
+            cursor.execute(insert)
+            con.commit()
+            
+        print("Inserindo dados na tabela professor")
+        for p in profs.items():
+            insert = f"""INSERT INTO professor VALUES ({p[0]}, "{p[1]}");"""
+            cursor.execute(insert)
+            con.commit()
 
-        # with open(turmas, "r") as f_turmas:
-        #     turmas = csv.reader(f_turmas)
-        #     next(turmas)
-        #     professor = {}
-        #     for line in turmas:
-        #         professor[line[2]] = line[8]
-        # with open(turmas, "r") as f_turmas:
-        #     turmas = csv.reader(f_turmas)
-        #     next(turmas)
-        #     for line in turmas:
-        #         numero, periodo, professor, horario = line[0], line[1], line[2], line[3]
-        #         vagas_ocupadas, total_vagas, local = line[4], line[5], line[6]
-        #         cod_disciplinas, cod_dpto = line[7], line[8]
-        #         insert_professor = f"""INSERT INTO professor VALUES ()"""
-        #         insert_turma = f"""INSERT INTO turma
-        #                      VALUES ("{periodo}", "{horario}", "{local}", {numero}, {vagas_ocupadas}, {total_vagas}, {id_professor}, "{cod_disciplinas}")"""
-        #         cursor.execute(insert)
-        #         con.commit()
+        print("Inserindo dados na tabela professor_disciplina")
+        for pd in profs_disc.keys():
+            insert = f"""INSERT INTO professor_disciplina VALUES ("{pd[0]}", {pd[1]});"""
+            cursor.execute(insert)
+            con.commit()
+            
+        print("Inserindo dados na tabela departamento_professor")
+        for dp in deps_prof.keys():
+            insert = f"""INSERT INTO departamento_professor VALUES ("{dp[0]}", {dp[1]});"""
+            cursor.execute(insert)
+            con.commit()
+
+        print("Inserindo dados na tabela turma")
+        for t in turmas_dict.items():
+            insert = f"""INSERT INTO turma VALUES ("{t[0][0]}", "{t[0][1]}", "{t[0][2]}", "{t[1][0]}", {t[1][1]}, {t[1][2]}, {t[0][3]}, "{t[1][3]}");"""
+            cursor.execute(insert)
+            con.commit()
 
         cursor.close()
         con.close()
+    print("SUCESSO")
+    print(f"{int((time.time()-init)/60)}:{int((time.time()-init)%60):02d}")
+
 except Error as erro:
     cursor.execute("DROP DATABASE AvaliaUnB;")
+    print(erro)
+    print(f"{int((time.time()-init)/60)}:{int((time.time()-init)%60):02d}")
     con.commit()
     cursor.close()
     con.close()

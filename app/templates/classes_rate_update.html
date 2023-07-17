@@ -33,16 +33,22 @@
             padding: 5px;
             margin-bottom: 10px;
         }
-        button[type="submit"],
-        button[type="button"] {
+        .submit-button {
+            margin-top: 10px;
+            width: 104%;
             padding: 10px 20px;
             font-size: 16px;
+            background-color: #663399;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Editar Avaliação</h1>
-    <form action="/atualizar-avaliacao" method="POST">
+    <form action="/update_rate/rateid={{ avaliacao.id }}" method="POST">
         <div>
             <label for="comentario">Comentário:</label>
             <textarea id="comentario" name="comentario" rows="5" cols="50">{{ avaliacao.comentario }}</textarea>
@@ -50,35 +56,27 @@
         <div>
             <label for="nota">Nota:</label>
             <select id="nota" name="nota">
-                <option value="MIGUÉ">MIGUÉ</option>
-                <option value="TRANQUILO">TRANQUILO</option>
-                <option value="MÉDIO">MÉDIO</option>
-                <option value="TRABALHOSO">TRABALHOSO</option>
-                <option value="FOGE">FOGE</option>
+                <option value="MIGUÉ" {% if avaliacao.nota == "MIGUÉ" %} selected {% endif %}>MIGUÉ</option>
+                <option value="TRANQUILO" {% if avaliacao.nota == "TRANQUILO" %} selected {% endif %}>TRANQUILO</option>
+                <option value="MÉDIO" {% if avaliacao.nota == "MÉDIO" %} selected {% endif %}>MÉDIO</option>
+                <option value="TRABALHOSO" {% if avaliacao.nota == "TRABALHOSO" %} selected {% endif %}>TRABALHOSO</option>
+                <option value="FOGE" {% if avaliacao.nota == "FOGE" %} selected {% endif %}>FOGE</option>
             </select>
         </div>
         <div>
             <label for="dificuldade">Dificuldade:</label>
             <select id="dificuldade" name="dificuldade">
-                <option value="MUITO FÁCIL">MUITO FÁCIL</option>
-                <option value="FÁCIL">FÁCIL</option>
-                <option value="MÉDIO">MÉDIO</option>
-                <option value="DIFÍCIL">DIFÍCIL</option>
-                <option value="MUITO DIFÍCIL">MUITO DIFÍCIL</option>
+                <option value="MUITO FÁCIL" {% if avaliacao.dificuldade == "MUITO FÁCIL" %} selected {% endif %}>MUITO FÁCIL</option>
+                <option value="FÁCIL" {% if avaliacao.dificuldade == "FÁCIL" %} selected {% endif %}>FÁCIL</option>
+                <option value="MÉDIO" {% if avaliacao.dificuldade == "MÉDIO" %} selected {% endif %}>MÉDIO</option>
+                <option value="DIFÍCIL" {% if avaliacao.dificuldade == "DIFÍCIL" %} selected {% endif %}>DIFÍCIL</option>
+                <option value="MUITO DIFÍCIL" {% if avaliacao.dificuldade == "MUITO DIFÍCIL" %} selected {% endif %}>MUITO DIFÍCIL</option>
             </select>
         </div>
         <div>
-            <button type="submit">Atualizar Avaliação</button>
-            <button type="button" onclick="confirmarExclusao()">Excluir Avaliação</button>
+            <button type="submit" class="submit-button">Atualizar Avaliação</button>
         </div>
     </form>
-
-    <script>
-        function confirmarExclusao() {
-            if (confirm('Tem certeza que deseja excluir esta avaliação?')) {
-                window.location.href = "/excluir-avaliacao";
-            }
-        }
     </script>
 </body>
 </html>

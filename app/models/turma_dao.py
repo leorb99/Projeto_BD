@@ -48,3 +48,23 @@ class TurmaDAO():
         except Error as ex:
             print("Falha ao localizar dados na tabela turmas: ", ex) 
     
+    def getTurmas(self, cursor, codDisciplina):
+        sql = f"""SELECT * FROM turma WHERE fk_codDisciplina="{codDisciplina}";"""
+        try:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            turma = [turmas.Turma(*t) for t in result]
+            return turma
+        except Error as ex:
+            print("Falha ao localizar dados na tabela turmas: ", ex) 
+    
+    def getDisciplina(self, cursor, idProfessor, horario, local, periodo):
+        sql = """SELECT fk_codDisciplina FROM turma
+                 WHERE periodo=%s AND horario=%s AND local=%s AND fk_idProfessor=%s"""
+        try:
+            consulta = (periodo, horario, local, idProfessor)
+            cursor.execute(sql, consulta)
+            result = cursor.fetchone()
+            return result
+        except Error as ex:
+            print("Falha ao localizar dados na tabela turmas: ", ex) 

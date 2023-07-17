@@ -28,15 +28,22 @@
             padding: 5px;
             margin-bottom: 10px;
         }
-        button[type="submit"] {
+        .submit-button {
+            margin-top: 10px;
+            width: 104%;
             padding: 10px 20px;
             font-size: 16px;
+            background-color: #663399;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Escrever Avaliação</h1>
-    <form action="/classes/rate" method="POST">
+    <form action="/classes_rate" method="POST">
         <div>
             <label for="comentario">Comentário:</label>
             <textarea id="comentario" name="comentario" rows="5" cols="50"></textarea>
@@ -62,23 +69,23 @@
             </select>
         </div>
         <div>
-            <label for="fk_idProfessor">Nome do Professor:</label>
-            <input type="text" id="fk_idProfessor" name="fk_idProfessor">
+            <label for="professor">Nome do Professor:</label>
+            <input type="text" id="professor" name="professor" value="{{ turma.professor }}" readonly>
         </div>
         <div>
-            <label for="fk_periodo">Período:</label>
-            <input type="text" id="fk_periodo" name="fk_periodo">
+            <label for="periodo">Período:</label>
+            <input type="text" id="periodo" name="periodo" value="{{ turma.periodo }}" readonly>
         </div>
         <div>
-            <label for="fk_local">Local:</label>
-            <input type="text" id="fk_local" name="fk_local">
+            <label for="local">Local:</label>
+            <input type="text" id="local" name="local" value="{{ turma.local }}" readonly>
         </div>
         <div>
-            <label for="fk_horario">Horário:</label>
-            <input type="text" id="fk_horario" name="fk_horario">
+            <label for="horario">Horário:</label>
+            <input type="text" id="horario" name="horario" value="{{ turma.horario }}" readonly>
         </div>
         <div>
-            <button type="submit">Enviar Avaliação</button>
+            <button type="submit" class="submit-button">Enviar Avaliação</button>
         </div>
     </form>
 </body>

@@ -19,8 +19,9 @@ class UsuarioDAO():
         sql = ("""UPDATE usuario SET nome=%s, email=%s, senha=%s, curso=%s, foto=%s
                WHERE matricula=%s;""")
         try:
-            insert = (usuario.nome, usuario.email, usuario.senha, usuario.curso, foto, usuario.matricula)
-            cursor.execute(sql, insert)
+            update = (usuario.nome, usuario.email, usuario.senha, usuario.curso, 
+                      foto, usuario.matricula)
+            cursor.execute(sql, update)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao atualizar dados na tabela usuários: ", ex)
@@ -56,7 +57,7 @@ class UsuarioDAO():
         except Error as ex:
             print("Falha ao localizar dados na tabela usuários: ", ex) 
     
-    def get_pass(self, cursor, matricula):
+    def getPassword(self, cursor, matricula):
         sql = "SELECT senha FROM usuario WHERE matricula=%s;"
         try:
             cursor.execute(sql, (matricula,))

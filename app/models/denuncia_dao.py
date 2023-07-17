@@ -4,9 +4,11 @@ from app.controllers import denuncias
 
 class DenunciaDAO():
     def create(self, cursor, denuncia):
-        sql = (f"""INSERT INTO denuncia VALUES('NÃO AVALIADA', "{denuncia['motivo']}", "{denuncia['fk_matricula']}", "{denuncia['fk_idAvaliacao']}");""")
+        sql = ("""INSERT INTO denuncia (avaliado, motivo, fk_matricula, fk_idAvaliacao)
+               VALUES("NÃO AVALIADA", %s, %s, %s);""")
         try:
-            cursor.execute(sql)
+            insert = (denuncia.motivo, denuncia.fk_matricula, denuncia.fk_idAvaliacao)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao inserir dados na tabela denúncia: ", ex)
@@ -37,12 +39,12 @@ class DenunciaDAO():
         except Error as ex:
             print("Falha ao localizar dados na tabela denúncia: ", ex)
 
-    def getNaoAvaliado(self, cursor, avaliado):
+    def getNaoAvaliado(self, cursor):
         sql = "SELECT * FROM denuncia WHERE avaliado='NÃO AVALIADA';"
         try:
             cursor.execute(sql)
-            result = cursor.fetchone()
-            denuncia = denuncias.Denuncia(*result)
+            result = cursor.fetchall()
+            denuncia = [denuncias.Denuncia(*d) for d in result]
             return denuncia
         except Error as ex:
             print("Falha ao localizar dados na tabela denúncia: ", ex)

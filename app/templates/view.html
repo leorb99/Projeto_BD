@@ -4,22 +4,42 @@
 <html>
 <head>
     <title>View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        td {
+            padding: 2px;
+        }
+        table {
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: separate;
+            border-spacing: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>View</h1>
     <table>
         <thead>
             <tr>
-                <th>Coluna 1</th>
-                <th>Coluna 2</th>
-                <th>Coluna 3</th>
-                <th>Coluna 4</th>
-                <th>Coluna 5</th>
-                <th>Coluna 6</th>
+                <th>Nome</th>
+                <th>Nota</th>
+                <th>Nome da Disciplina</th>
+                <th>Horário</th>
+                <th>Local</th>
+                <th>Código Disciplina</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in data %}
+            {% for row in results %}
             <tr>
                 <td>{{ row[0] }}</td>
                 <td>{{ row[1] }}</td>

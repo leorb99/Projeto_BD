@@ -2,6 +2,7 @@
 CREATE DATABASE AvaliaUnB;
 
 USE AvaliaUnB;
+
 CREATE TABLE usuario(
     matricula CHAR(9) NOT NULL PRIMARY KEY,
     nome VARCHAR(70) NOT NULL,
@@ -13,6 +14,7 @@ CREATE TABLE usuario(
     idade INT NULL,
     foto BLOB NULL
 );
+
 CREATE TRIGGER tr_idade BEFORE INSERT
 ON usuario
 FOR EACH ROW
@@ -31,11 +33,16 @@ CREATE TABLE disciplina(
 );
 
 CREATE TABLE professor(
-    idProfessor BIGINT AUTO_INCREMENT NOT NULL,
-    nome VARCHAR(70) NOT NULL,
+    idProfessor BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    nome VARCHAR(70) NOT NULL
+);
+
+CREATE TABLE departamento_professor(
     fk_codDpto VARCHAR(4) NOT NULL,
+    fk_idProfessor BIGINT NOT NULL,
     FOREIGN KEY (fk_codDpto) REFERENCES departamento(codigo) ON DELETE CASCADE,
-    PRIMARY KEY (idProfessor)
+    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE,
+    PRIMARY KEY (fk_codDpto, fk_idProfessor)
 );
 
 CREATE TABLE professor_disciplina(
@@ -48,13 +55,13 @@ CREATE TABLE professor_disciplina(
 
 CREATE TABLE turma(
 	periodo VARCHAR(6) NOT NULL,
-    horario VARCHAR(105) NOT NULL,
+    horario VARCHAR(200) NOT NULL,
     local VARCHAR(60) NOT NULL,
     numero VARCHAR(10) NOT NULL,
     vagasOcupadas INT NULL,
     totalVagas INT NULL,
     fk_idProfessor BIGINT NOT NULL,
-    fk_codDisciplina VARCHAR(10) NOT NULL,
+    fk_codDisciplina VARCHAR(15) NOT NULL,
     FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE, 
     FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo) ON DELETE CASCADE,
     PRIMARY KEY (periodo, horario, local, fk_idProfessor)
@@ -69,7 +76,7 @@ CREATE TABLE avaliacao(
     fk_idProfessor BIGINT NOT NULL,
     fk_periodo VARCHAR(6) NOT NULL,
     fk_local VARCHAR(60) NOT NULL,
-	fk_horario VARCHAR(105) NOT NULL,
+	fk_horario VARCHAR(200) NOT NULL,
     FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula) ON DELETE CASCADE,
     FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE,
     FOREIGN KEY (fk_periodo, fk_horario, fk_local) REFERENCES turma(periodo, horario, local) ON DELETE CASCADE
@@ -96,6 +103,8 @@ SELECT professor.nome AS nome,
 FROM turma
 INNER JOIN disciplina ON turma.fk_codDisciplina = disciplina.codigo
 INNER JOIN avaliacao ON turma.fk_idProfessor = avaliacao.fk_idProfessor
+AND turma.periodo = avaliacao.fk_periodo AND turma.local = avaliacao.fk_local
+AND turma.horario = avaliacao.fk_horario
 INNER JOIN professor ON turma.fk_idProfessor = professor.idProfessor;
 
 -- procedure
@@ -110,4 +119,4 @@ BEGIN
 END//
 DELIMITER;
 
-/* DROP DATABASE AvaliaUnB */
+/* DROP DATABASE AvaliaUnB; */
