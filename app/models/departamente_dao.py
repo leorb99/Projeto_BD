@@ -4,17 +4,19 @@ from app.controllers import departamentos
 
 class DepartamentoDAO():
     def create(self, cursor, departamento):
-        sql = (f"""INSERT INTO departamento VALUES("{departamento['codigo']}", "{departamento['nome']}");""")
+        sql = ("""INSERT INTO departamento VALUES(%s, %s);""")
         try:
-            cursor.execute(sql)
+            insert = (departamento.codigo, departamento.nome)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao inserir dados na tabela departamento: ", ex)
 
     def update(self, cursor, departamento):
-        sql = (f"""UPDATE departamento SET nome="{departamento['nome']}" WHERE codigo="{departamento['codigo']}";""")
+        sql = ("""UPDATE departamento SET nome=%s WHERE codigo=%s;""")
         try:
-            cursor.execute(sql)
+            update = (departamento.codigo, departamento.nome)
+            cursor.execute(sql, update)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao atualizar dados na tabela departamento: ", ex)

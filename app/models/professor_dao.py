@@ -4,9 +4,10 @@ from app.controllers import professores
 
 class ProfessorDAO():
     def create(self, cursor, professor):
-        sql = (f"""INSERT INTO professor VALUES("{professor['nome']}");""")
+        sql = ("""INSERT INTO professor (nome) VALUES(%s);""")
         try:
-            cursor.execute(sql)
+            insert = professor.nome
+            cursor.execute(sql, (insert,))
             app.models.con.commit()
         except Error as ex:
             print("Falha ao inserir dados na tabela professor: ", ex)

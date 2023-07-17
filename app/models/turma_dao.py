@@ -4,34 +4,42 @@ from app.controllers import turmas
 
 class TurmaDAO():
     def create(self, cursor, turma):
-        sql = (f"""INSERT INTO turma VALUES("{turma['periodo']}", "{turma['horario']}", "{turma['local']}", "{turma['numero']}", "{turma['vagasOcupadas']}", "{turma['totalVagas']}", "{turma['fk_idProfessor']}", {turma['fk_codDisciplina']});""")
+        sql = ("""INSERT INTO turma
+               VALUES(%s, %s, %s, %s, %s, %s, %s, %s);""")
         try:
-            cursor.execute(sql)
+            insert = (turma.periodo, turma.horario, turma.local, turma.numero,
+                      turma.vagasOcupadas, turma.totalVagas, turma.fk_idProfessor, 
+                      turma.fk_codDisciplina,)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao inserir dados na tabela turmas: ", ex)
 
     def update(self, cursor, turma):
-        sql = (f"""UPDATE turma SET vagasOcupadas="{turma['vagasOcupadas']}", totalVagas="{turma['totalVagas']}", dificuldade="{turma['dificuldade']}" """
-               f"""WHERE periodo="{turma['periodo']}" AND horario="{turma['horario']}" AND local="{turma['local']}" AND fk_idProfessor="{turma['fk_idProfessor']}";""")
+        sql = ("""UPDATE turma SET vagasOcupadas=%s, totalVagas=%s
+               WHERE periodo=%s AND horario=%s AND local=%s AND fk_idProfessor=%s;""")
         try:
-            cursor.execute(sql)
+            update = (turma.vagasOcupadas, turma.totalVagas, turma.periodo, turma.horario, turma.local, turma.fk_idProfessor)
+            cursor.execute(sql, update)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao atualizar dados na tabela turmas: ", ex)
 
     def delete(self, cursor, turma):
-        sql = (f"""DELETE FROM turma WHERE periodo="{turma['periodo']}" AND horario="{turma['horario']}" AND local="{turma['local']}" AND fk_idProfessor="{turma['fk_idProfessor']}";""")
+        sql = ("""DELETE FROM turma
+               WHERE periodo=%s AND horario=%s AND local=%s AND fk_idProfessor=%s;""")
         try:
+            delete = (turma.periodo, turma.horario, turma.local, turma.fk_idProfessor)
             cursor.execute(sql)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao deletar dados na tabela turmas: ", ex)
     
     def get(self, cursor, turma):
-        sql = f"""SELECT * FROM turma WHERE periodo="{turma['periodo']}" AND horario="{turma['horario']}" AND local="{turma['local']}" AND fk_idProfessor="{turma['fk_idProfessor']}";"""
+        sql = """SELECT * FROM turma WHERE periodo=%s AND horario=%s AND local=%s AND fk_idProfessor=%s;"""
         try:
-            cursor.execute(sql)
+            select = (turma.periodo, turma.horario, turma.local, turma.fk_idProfessor)
+            cursor.execute(sql, select)
             result = cursor.fetchone()
             turma_ = turmas.Turma(*result)
             return turma_
@@ -49,9 +57,9 @@ class TurmaDAO():
             print("Falha ao localizar dados na tabela turmas: ", ex) 
     
     def getTurmas(self, cursor, codDisciplina):
-        sql = f"""SELECT * FROM turma WHERE fk_codDisciplina="{codDisciplina}";"""
+        sql = """SELECT * FROM turma WHERE fk_codDisciplina=%s;"""
         try:
-            cursor.execute(sql)
+            cursor.execute(sql, (codDisciplina,))
             result = cursor.fetchall()
             turma = [turmas.Turma(*t) for t in result]
             return turma

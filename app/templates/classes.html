@@ -89,7 +89,9 @@
             </form>
         </div>
         <div id="turmas-list">
-            {% if turmas %}
+            {% if error %}
+                <p> {{ error }}</p>
+            {% endif %}
             <h2>{{nome_disciplina}}</h2>
             <table>
                 <thead>
@@ -124,8 +126,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-            </table>    
-            {% endif %}
+            </table>
         </div>
     </div>   
 </body>

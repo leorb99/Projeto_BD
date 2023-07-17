@@ -4,7 +4,7 @@ from app import app
 from flask import render_template, request, redirect
 from . import avaliacoes, denuncias, departamentos, disciplinas, professor_disciplina, professores
 from . import turmas, usuarios, departamento_professor
-from app.models import con, cursor, avaliacao_dao, usuario_dao, professor_disciplina_dao, view_dao
+from app.models import cursor, avaliacao_dao, usuario_dao, professor_disciplina_dao, view_dao
 from app.models import departamente_dao, disciplina_dao, professor_dao, denuncia_dao, turma_dao
 
 
@@ -202,11 +202,13 @@ def classes_search():
     cod_disciplina = request.args.get("codigo")
     turma = turma_dao.TurmaDAO()
     turmas = turma.getTurmas(cursor, cod_disciplina)
-    for turma in turmas:
-        turma.setProf()
-    turma.setNomeDisciplina()
-    nome_disciplina = turma.nome_disciplina
-    return render_template("classes.html", turmas=turmas, nome_disciplina=nome_disciplina)
+    if turmas:
+        for turma in turmas:
+            turma.setProf()
+        turma.setNomeDisciplina()
+        nome_disciplina = turma.nome_disciplina
+        return render_template("classes.html", turmas=turmas, nome_disciplina=nome_disciplina)
+    return render_template("classes.html", error="Código inválido")
 
 
 @app.route("/classes_rate/", methods=["POST"])

@@ -4,18 +4,20 @@ from app.controllers import disciplinas
 
 class DisciplinaDAO():
     def create(self, cursor, disciplina):
-        sql = (f"""INSERT INTO disciplina VALUES("{disciplina['codigo']}", "{disciplina['nome']}", "{disciplina['fk_codDpto']}");""")
+        sql = ("""INSERT INTO disciplina VALUES(%s, %s, %s);""")
         try:
-            cursor.execute(sql)
+            insert = (disciplina.codigo, disciplina.nome, disciplina.codDpto)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao inserir dados na tabela disciplina: ", ex)
 
     def update(self, cursor, disciplina):
-        sql = (f"""UPDATE disciplina SET nome="{disciplina['nome']}" """
-               """WHERE codigo="{disciplina['codigo']}";""")
+        sql = ("""UPDATE disciplina SET nome=%s"
+                  WHERE codigo=%s;""")
         try:
-            cursor.execute(sql)
+            update = (disciplina.nome, disciplina.codigo)
+            cursor.execute(sql, update)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao atualizar dados na tabela disciplina: ", ex)

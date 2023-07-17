@@ -4,17 +4,20 @@ from app.controllers import professor_disciplina
 
 class ProfDisciplinaDAO():
     def create(self, cursor, professor_disc):
-        sql = (f"""INSERT INTO professor_disciplina VALUES("{professor_disc['fk_codDisciplina']}", "{professor_disc['fk_idProfessor']}");""")
+        sql = ("""INSERT INTO professor_disciplina VALUES(%s, %s);""")
         try:
-            cursor.execute(sql)
+            insert = (professor_disc.fk_codDisciplina, professor_disc.fk_idProfessor)
+            cursor.execute(sql, insert)
             app.models.con.commit()
         except Error as ex:
             print("Falha ao inserir dados na tabela professor_disciplina: ", ex)
 
     def get(self, cursor, professor_disc):
-        sql = f"""SELECT * FROM professor_disciplina WHERE fk_idProfessor="{professor_disc['fk_idProfessor']}" AND fk_codDisciplina="{professor_disc['fk_codDisciplina']}";"""
+        sql = """SELECT * FROM professor_disciplina 
+                 WHERE fk_idProfessor=%s AND fk_codDisciplina=%s;"""
         try:
-            cursor.execute(sql)
+            select = (professor_disc.fk_idProfessor, professor_disc.fk_codDisciplina)
+            cursor.execute(sql, select)
             result = cursor.fetchone()
             prof_disciplina = professor_disciplina.ProfDisciplina(*result)
             return prof_disciplina
