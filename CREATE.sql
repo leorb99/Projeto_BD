@@ -48,8 +48,8 @@ CREATE TABLE departamento_professor(
 CREATE TABLE professor_disciplina(
     fk_codDisciplina VARCHAR(15) NOT NULL,
     fk_idProfessor BIGINT NOT NULL,
-    FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo),
-    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor),
+    FOREIGN KEY (fk_codDisciplina) REFERENCES disciplina(codigo) ON DELETE CASCADE,
+    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE,
     PRIMARY KEY (fk_codDisciplina, fk_idProfessor) 
 );
 
@@ -78,7 +78,7 @@ CREATE TABLE avaliacao(
     fk_local VARCHAR(60) NOT NULL,
 	fk_horario VARCHAR(200) NOT NULL,
     FOREIGN KEY (fk_matricula) REFERENCES usuario(matricula) ON DELETE CASCADE,
-    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor) ON DELETE CASCADE,
+    FOREIGN KEY (fk_idProfessor) REFERENCES professor(idProfessor),
     FOREIGN KEY (fk_periodo, fk_horario, fk_local) REFERENCES turma(periodo, horario, local) ON DELETE CASCADE
 );
 

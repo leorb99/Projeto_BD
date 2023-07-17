@@ -103,5 +103,3 @@ INSERT INTO denuncia VALUES(
     3, "NÃO AVALIADA", NULL, "231005138", 4
 );
 
-
-SELECT * FROM turma WHERE fk_codDisciplina="CIC0099"

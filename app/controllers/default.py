@@ -224,6 +224,8 @@ def classes_rate():
         avaliacao.setIDProfessor()
         create_rate = avaliacao_dao.AvaliacaoDAO()
         create_rate.create(cursor, avaliacao)
+        if user.privilegio == "ADM":
+            return redirect("/profile_adm")
         return redirect("/profile")
     return render_template("classes_rate.html")
 
