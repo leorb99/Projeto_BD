@@ -8,7 +8,6 @@ O projeto foi desenvolvido em python usando o framework Flask.
 Antes de tudo, clone o repositório
 ```
 git clone https://github.com/leorb99/Projeto_BD
-
 ```
 Recomendo que instale o virtualenv, mas antes certifique-se de que tem o pip3 instalado, caso não tenha instale com
 ```
