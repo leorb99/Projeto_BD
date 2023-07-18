@@ -14,7 +14,7 @@ Recomendo que instale o virtualenv, mas antes certifique-se de que tem o pip3 in
 sudo apt install python3-pip
 ```
 ```
-pip3 install virtaulenv
+pip3 install virtualenv
 ```
 Vá para o diretório do projeto e inicie o ambiente virtual 
 ```
@@ -47,8 +47,13 @@ SHOW DATABASES;
 AvaliaUnB deve aparecer entre os databases
 ```
 USE AvaliaUnB;
+SHOW TABLES;
 ```
-Assim você deve conseguir ver as tabelas do banco de dados.
+Assim você deve conseguir ver as tabelas do banco de dados. Pode sair do mysql.
+```
+exit
+```
+
 Execute o próximo comando para popular o banco de dados.
 ```
 mysql -u <seu_usuario_mysql> -p < MIGRATE.sql
