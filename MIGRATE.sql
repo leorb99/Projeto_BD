@@ -2,13 +2,13 @@ USE AvaliaUnB;
 
 -- usuario
 INSERT INTO usuario VALUES(
-    "190119233", "GABRIEL BARBOSA", "gabigol_matador@hotmail.com", "umasenha", "Educação Física", "ADM", "1996-08-30", NULL, NULL
+    "190119233", "GABRIEL BARBOSA", "gabigol_matador@hotmail.com", "123456", "Educação Física", "ADM", "1996-08-30", NULL, NULL
 );
 INSERT INTO usuario VALUES(
-    "190119210", "BRUNO HENRIQUE", "bh27@hotmail.com", "123", "Comunicação", "COMUM", "1990-12-30", NULL, NULL
+    "190119210", "BRUNO HENRIQUE", "bh27@hotmail.com", "123456", "Comunicação Social - Publicidade e Propaganda", "COMUM", "1990-12-30", NULL, NULL
 );
 INSERT INTO usuario VALUES(
-    "231005138", "SOFIA", "sofia@hotmail.com", "123senha", "Medicina Veterinária", "COMUM", "2013-09-05", NULL, NULL
+    "231005138", "SOFIA", "sofia@hotmail.com", "123456", "Medicina Veterinária", "COMUM", "2013-09-05", NULL, NULL
 );
 
 -- departamento

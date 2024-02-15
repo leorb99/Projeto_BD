@@ -4,9 +4,9 @@
 {% endblock %}
 
 {% block content %}
-<body class="text-center">    
+<body>    
     <div class="container">
-        <h1 class="h3 mb-3">Cadastro</h1>
+        <h1 class="text-center h3 mb-3">Cadastro</h1>
         <form method="POST" class="signup-form" style="color:whitesmoke" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             {{ form.csrf_token }}
@@ -35,11 +35,13 @@
             {{ form.foto.label() }}
             {{ form.foto(class="form-control") }}
             <br>
-            <div class="checkbox mb-3">
+            <div class="checkbox mb-3 text-center">
                 <h6>Já tem uma conta?</h6>
                 <a class="btn btn-sm btn-secondary" href="{{ url_for('login') }}">Login</a>
             </div>
-            {{ form.submit(class="btn btn-block btn-primary") }}
+            <div class="text-center">
+                {{ form.submit(class="btn btn-block btn-primary") }}
+            </div>
         </form>
     </div>
 </body>

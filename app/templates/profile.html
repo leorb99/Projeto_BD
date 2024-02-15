@@ -1,57 +1,107 @@
 {% extends 'base.html' %}
 {% block title %}
-    Signup
+    Profile
 {% endblock %}
 
 {% block content %}
 <body>
     <div class="container">
-        <h1 class="text-center h3 mb-3">{{ user.nome.capitalize() }}</h1>
+        <br>
         <div class="form-group">
             <label for="foto"></label>
             <img src="data:image/png;base64,{{ base64_data }}" alt="Foto do usuário">
         </div>
+
         <div class="form-group">
-            <label for="matricula">Matrícula:</label>
+            <label for="matricula"><strong>Matrícula:</strong></label>
             <span id="matricula">{{ user.matricula }}</span>
         </div>
+        
         <div class="form-group">
-            <label for="nome">Nome:</label>
-            <span id="nome">{{ user.nome }}</span>
+            <label for="nome"><strong>Nome:</strong></label>
+            <span id="nome">{{ user.nome.title() }}</span>
         </div>
+        
         <div class="form-group">
-            <label for="email">Email:</label>
+            <label for="email"><strong>Email:</strong></label>
             <span id="email">{{ user.email }}</span>
         </div>
+        
         <div class="form-group">
-            <label for="curso">Curso:</label>
+            <label for="curso"><strong>Curso:</strong></label>
             <span id="curso">{{ user.curso }}</span>
         </div>
     </div>
-    <h1 class="text-center h3 mb-3">Minhas Avaliações</h1>
-    <div class="card container card-body">
+
+    {% if denuncias and session["privilegio"] == "ADM" %}
+        <h1 class="text-center h3 mb-3">Denúncias</h1>
+        {% for denuncia in denuncias %}
+            <div class="card container card-body">
+                {% if denuncia.motivo == None or denuncia.motivo == "" %}
+                {% else %}
+                    <p>
+                        <strong>Motivo:</strong> {{ denuncia.motivo }}
+                    </p>
+                {% endif %}
+
+                <p>
+                    <strong>Usuário Denunciado:</strong> {{ denuncia.denunciado }}
+                </p>
+
+                <p>
+                    <strong>Comentário:</strong> {{ denuncia.comentario }}
+                </p>
+
+                <p>
+                    <strong>Denúncia feita por:</strong> {{ denuncia.fk_matricula }}
+                </p>
+
+                <div>
+                    <a class="btn btn-danger" href="/delete_comment/rate_id={{ denuncia.fk_idAvaliacao }}">Excluir Comentário</a>
+                    <a class="btn btn-danger" href="/delete_account/user_denounced={{ denuncia.denunciado }}">Excluir Conta</a>
+                    <a class="btn btn-primary" id="ignore-opt" href="/ignore_report/denuncia_id={{ denuncia.idDenuncia }}">Ignorar Denúncia</a>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% endif %}
+    <br>
+    
+    {% if avaliacoes %}
+        <h1 class="text-center h3 mb-3">Minhas Avaliações</h1>
         {% for avaliacao in avaliacoes %}
-            <p>
-                <strong>Comentário:</strong> {{ avaliacao.comentario }}
-            </p>
-            <p>
-                <strong>Nota:</strong> {{ avaliacao.nota }}
-            </p>
-            <p>
-                <strong>Dificuldade:</strong> {{ avaliacao.dificuldade }}
-            </p>
-            <p>
-                <strong>Professor:</strong> {{ avaliacao.professor }}
-            </p>
-            <p>
-                <strong>Disciplina:</strong> {{ avaliacao.disciplina }}
-            </p>
-            <p>
-                <strong>Período:</strong> {{ avaliacao.fk_periodo }}
-            </p>
-            <a id="ignore-opt" href="/classes/rate/update/rate_id={{ avaliacao.id }}">Editar Avaliação</a>
-            <a href="/delete_comment/rate_id={{ avaliacao.id }}">Excluir Avaliação</a>
+            <div class="card container card-body">
+                <p>
+                    <strong>Comentário:</strong> {{ avaliacao.comentario }}
+                </p>
+        
+                <p>
+                    <strong>Nota:</strong> {{ avaliacao.nota }}
+                </p>
+        
+                <p>
+                    <strong>Dificuldade:</strong> {{ avaliacao.dificuldade }}
+                </p>
+        
+                <p>
+                    <strong>Professor:</strong> {{ avaliacao.professor }}
+                </p>
+        
+                <p>
+                    <strong>Disciplina:</strong> {{ avaliacao.disciplina }}
+                </p>
+        
+                <p>
+                    <strong>Período:</strong> {{ avaliacao.fk_periodo }}
+                </p>
+        
+                <div>
+                    <a class="btn btn-primary" id="ignore-opt" href="/classes/rate/update/rate_id={{ avaliacao.id }}">Editar Avaliação</a>
+                    <a class="btn btn-danger" href="/delete_comment/rate_id={{ avaliacao.id }}">Excluir Avaliação</a>
+                </div>
+            </div>
+            <br>
             {% endfor %}
-    </div>
+        {% endif %}
 </body>
 {% endblock %}

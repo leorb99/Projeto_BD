@@ -123,10 +123,6 @@ class RateClass(FlaskForm):
     comentario = TextAreaField(label="Comentário:")
     nota = SelectField(label="Nota:", choices=notas, validators=[DataRequired()])
     dificuldade = SelectField(label="Dificuldade:", choices=niveis_dificuldade, validators=[DataRequired()])
-    nome_professor = StringField(label="Nome do(a) Professor(a):", validators=[DataRequired()])
-    periodo = StringField(label="Período:", validators=[DataRequired()])
-    horario = StringField(label="Horário:", validators=[DataRequired()])
-    local = StringField(label="Local:", validators=[DataRequired()])
     submit = SubmitField(label="Enviar Avaliação")
  
 class EditRate(FlaskForm):
@@ -136,10 +132,11 @@ class EditRate(FlaskForm):
     submit = SubmitField(label="Editar Avaliação")
 
 class EditProfile(FlaskForm):
-    matricula = StringField(label="Matrícula:", validators=[DataRequired()])
+    matricula = StringField(label="Matrícula:")
     nome = StringField(label="Nome:", validators=[DataRequired()])
-    email = EmailField(label="Email:")
-    curso = SelectField(label="Curso:", choices=cursos, validators=[DataRequired()])
+    email = EmailField(label="Email:", validators=[DataRequired()])
+    # senha = PasswordField(label="Senha:")
+    curso = SelectField(label="Curso:", choices=cursos)
     foto = FileField(label="Foto:")
     submit = SubmitField(label="Atualizar Perfil")
     delete = SubmitField(label="Excluir Conta")

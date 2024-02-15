@@ -4,8 +4,8 @@
 {% endblock %}
 
 {% block content %}
-<body class="">
-    <h1 class="text-center">Avaliações da turma</h1>
+<body>
+    <h1 class="text-center h3 mb-3">Avaliações da turma</h1>
     {% for avaliacao in avaliacoes %}
         <div class="card container card-body">
             <p>
@@ -23,8 +23,8 @@
             <p>
                 <strong>Disciplina:</strong> {{ avaliacao.disciplina }}
             </p>
-            {% if session["privilegio"] == "COMUM" %}
-                <a class="btn-primary btn" onclick="toggleMotivoDenuncia({{ avaliacao.id }})">Denunciar</a>
+            {% if session["privilegio"] == "COMUM" and session["logged_in"] and session["user_id"] != avaliacao.fk_matricula %}
+                <button class="btn btn-primary btn-sm" onclick="toggleMotivoDenuncia({{ avaliacao.id }})">Denunciar</button>
                 <br>
                 <div id="form-denuncia-{{ avaliacao.id }}" style="display: none;">
                     <form action="/denounce" method="POST">
@@ -37,6 +37,7 @@
                 </div>
             {% endif %}
         </div>
+        <br>
     {% endfor %}
 
     <script>

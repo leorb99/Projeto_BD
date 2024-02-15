@@ -33,6 +33,7 @@ def manual_logout():
     session.pop("user_id", None) 
     session.pop("name", None) 
     session.pop("email", None)
+    session.pop("privilegio", None)
 
 
 def is_logged_in():
@@ -51,7 +52,7 @@ def login():
         user = usuarios.Usuario().get_usr(matricula=form.matricula.data)
         if user and user.valida_senha(form.senha.data):
             logged_in(user)
-            flash(f"Você está logado! Bem-vindo(a), {user.nome}", category="success")
+            flash(f"Você está logado! Bem-vindo(a), {user.nome.title()}", category="success")
             return redirect(url_for("profile"))
         flash("Matrícula e senha inválida! Tente novamente", category="danger")
     return render_template("login.html", form=form)
@@ -62,8 +63,9 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         foto_bin = convertImageToBinary("/../../images/generic_user.png")
-        foto = form.foto.data
-        foto_bin = foto.read()
+        if form.foto.data:
+            foto = form.foto.data
+            foto_bin = foto.read()
         senha = bcrypt.generate_password_hash(form.senha.data).decode("utf-8")
         user = usuarios.Usuario(matricula=form.matricula.data,
                                 nome=form.nome.data,
@@ -71,8 +73,7 @@ def signup():
                                 senha=senha,
                                 curso=form.curso.data,
                                 privilegio="COMUM",
-                                dataNascimento=form.data_nascimento.data,
-                                foto=foto_bin)
+                                dataNascimento=form.data_nascimento.data)
         create_user = usuario_dao.UsuarioDAO()
         create_user.create(cursor, user, foto_bin)
         logged_in(user)
@@ -92,42 +93,25 @@ def logout():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+    denuncias = []
+    if session["privilegio"] == "ADM":
+        denuncia = denuncia_dao.DenunciaDAO()
+        denuncias = denuncia.getNaoAvaliado(cursor)
+        for den in denuncias:
+            den.setAvaliacao()
+            den.setDenunciado()
+
     user_logged = user.get_usr(matricula=session["user_id"])
     avaliacao = avaliacao_dao.AvaliacaoDAO()
     avaliacoes = avaliacao.getMy(cursor, user_logged.matricula)
+    
     for avalia in avaliacoes:
         avalia.setProfessor()
         avalia.setDisciplina()
-    if not user_logged.foto:
-        user_logged.foto = foto
-        base64_data = base64.b64encode(foto).decode('utf-8')
-        return render_template("profile.html", user=user_logged, base64_data=base64_data,
-                               avaliacoes=avaliacoes)
+    
     base64_data = base64.b64encode(user_logged.foto).decode('utf-8')
     return render_template("profile.html", user=user_logged, base64_data=base64_data,
-                           avaliacoes=avaliacoes)
-
-
-@app.route("/profile_adm", methods=["GET", "POST"])
-def profile_adm(foto=foto):
-    denuncia = denuncia_dao.DenunciaDAO()
-    denuncias = denuncia.getNaoAvaliado(cursor)
-    for i in range(len(denuncias)):
-        denuncias[i].setAvaliacao()
-        denuncias[i].setDenunciado()
-    avaliacao = avaliacao_dao.AvaliacaoDAO()
-    avaliacoes = avaliacao.getMy(cursor, user.matricula)
-    for i in range(len(avaliacoes)):
-        avaliacoes[i].setProfessor()
-        avaliacoes[i].setDisciplina()
-    if not user.foto:
-        user.foto = foto
-        base64_data = base64.b64encode(foto).decode('utf-8')
-        return render_template("profile_adm.html", user=user, base64_data=base64_data,
-                               denuncias=denuncias, avaliacoes=avaliacoes)
-    base64_data = base64.b64encode(user.foto).decode('utf-8')
-    return render_template("profile_adm.html", user=user, base64_data=base64_data,
-                           denuncias=denuncias, avaliacoes=avaliacoes)
+                           avaliacoes=avaliacoes, denuncias=denuncias)
 
 
 @app.route("/edit_profile", methods=["GET", "POST"])
@@ -135,64 +119,32 @@ def edit_profile():
     form = EditProfile()
     user_logged = usuarios.Usuario().get_usr(matricula=session["user_id"])
     base64_data = base64.b64encode(user_logged.foto).decode('utf-8')
-    
-    if not base64_data:
-        base64_data = base64.b64encode(foto).decode('utf-8')
-    print(base64_data)
+    if form.validate_on_submit():
+        if form.submit.data:
+            user_logged.nome = form.nome.data
+            user_logged.email = form.email.data
+            user_logged.curso = form.curso.data
+            if form.foto.data:
+                foto = form.foto.data
+                foto_bin = foto.read()
+                user_logged.foto = foto_bin
+            usuario_dao.UsuarioDAO().update(cursor, user_logged, user_logged.foto)
+            flash("Perfil atualizado.", category="success")
+            return redirect(url_for("profile"))
+        
+        manual_logout()
+        usuario_dao.UsuarioDAO().delete(cursor, user_logged.matricula)
+        flash("Sua conta foi excluída com sucesso.", category="info")
+        return redirect(url_for("index"))
+        
     return render_template("edit_profile.html", form=form, user=user_logged,
                            base64_data=base64_data)
-    # base64_data = base64.b64encode(user.foto).decode('utf-8')
-    # if request.method == "POST":
-    #     if not user.foto:
-    #         base64_data = base64.b64encode(foto).decode('utf-8')
-    #         return render_template("profile_update.html", user=user, base64_data=base64_data)
-    #     return redirect("/profile")
-    # else:
-    #     return render_template("profile_update.html", user=user, base64_data=base64_data)
-
-
-@app.route("/profile/update/adm", methods=["GET", "POST"])
-def profile_update_adm(foto=foto):
-    base64_data = base64.b64encode(user.foto).decode('utf-8')
-    if request.method == "POST":
-        if not user.foto:
-            base64_data = base64.b64encode(foto).decode('utf-8')
-            return render_template("profile_update_adm.html", user=user, base64_data=base64_data)
-        return redirect("/profile_adm")
-    else:
-        return render_template("profile_update.html", user=user, base64_data=base64_data)
-
-
-@app.route("/user/update", methods=["GET", "POST"])
-def edit_user():
-    if request.method == "POST":
-        usuario = request.form
-        user.nome = usuario["nome"]
-        user.email = usuario["email"]
-        user.senha = usuario["senha"]
-        user.curso = usuario["curso"]
-        foto = request.files["foto"]
-        foto_bin = foto.read()
-        if foto.filename == "":
-            foto_bin = user.foto
-        user.foto = foto_bin
-        update_user = usuario_dao.UsuarioDAO()
-        update_user.update(cursor, user, foto_bin)
-        if user.privilegio == "ADM":
-            return redirect("/profile_adm")
-        return redirect("/profile")
 
 
 @app.route("/delete_account/user_denounced=<int:user_denounced>", methods=["POST", "GET"])
-@app.route("/delete_account", defaults={"user_denounced": None}, methods=["POST", "GET"])
 def delete_account(user_denounced):
-    delete_user = usuario_dao.UsuarioDAO()
-    if user_denounced:
-        user.matricula = user_denounced
-        delete_user.delete(cursor, user.matricula)
-        return redirect("/profile_adm")
-    delete_user.delete(cursor, user.matricula)
-    return redirect("/")
+    usuario_dao.UsuarioDAO().delete(cursor, user_denounced)
+    return redirect(url_for("profile"))
 
 
 @app.route("/ignore_report/denuncia_id=<int:denuncia_id>", methods=["POST", "GET"])
@@ -200,22 +152,13 @@ def ignore_report(denuncia_id):
     denuncia = {"avaliado": "AVALIADA", "idDenuncia": denuncia_id}
     update_denuncia = denuncia_dao.DenunciaDAO()
     update_denuncia.update(cursor, denuncia)
-    return redirect("/profile_adm")
+    return redirect(url_for("profile"))
 
 @app.route("/delete_comment/rate_id=<int:fk_idAvaliacao>", methods=["POST", "GET"])
-# @app.route("/delete_comment", defaults={"fk_idAvaliacao": None}, methods=["POST", "GET"])
 def delete_comment(fk_idAvaliacao):
     delete_rate = avaliacao_dao.AvaliacaoDAO()
-    # if fk_idAvaliacao:
     delete_rate.delete(cursor, fk_idAvaliacao)
-    if user.privilegio == "ADM":
-        return redirect("/profile_adm")
     return redirect("/profile")    
-
-
-@app.route("/classes/")
-def classes(): 
-    return render_template("classes.html")
 
 
 @app.route("/classes_search/codigo=<string:cod>")
@@ -261,7 +204,7 @@ def rate_class():
 def classes_rate_update(id):
     update_rate = avaliacao_dao.AvaliacaoDAO()
     avaliacao = update_rate.get(cursor, id)
-    return render_template("classes_rate_update.html", avaliacao=avaliacao)
+    return render_template("edit_rate.html", avaliacao=avaliacao)
 
 
 @app.route("/update_rate/rateid=<int:id>", methods=["GET", "POST"])
@@ -274,8 +217,6 @@ def edit_rate(id):
     avaliacao.dificuldade = info["dificuldade"]
     avaliacao.id = id
     update_rate.update(cursor, avaliacao)
-    if user.privilegio == "ADM":
-        return redirect("/profile_adm")
     return redirect("/profile")
 
 
@@ -283,16 +224,30 @@ def edit_rate(id):
 def classes_info():
     if is_logged_in():
         info = request.args.to_dict()
-        form = RateClass()
         turma = turmas.Turma()
+        form = RateClass()
         turma.fk_idProfessor = info["idProfessor"]
         turma.setProf()
         turma.periodo = info["periodo"]
         turma.horario = info["horario"]
         turma.local = info["local"]
+        if form.validate_on_submit():
+            avaliacao = avaliacoes.Avaliacao(comentario=form.comentario.data,
+                                             nota=form.nota.data, 
+                                             dificuldade=form.dificuldade.data,
+                                             fk_matricula=session["user_id"],
+                                             fk_idProfessor=turma.fk_idProfessor,
+                                             fk_periodo=turma.periodo,
+                                             fk_horario=turma.horario,
+                                             fk_local=turma.local)
+            avaliacao_dao.AvaliacaoDAO().create(cursor, avaliacao)
+            flash("Obrigado pela avaliação.", category="success")
+            return redirect(f"/rates/?periodo={avaliacao.fk_periodo}&horario={avaliacao.fk_horario}&local={avaliacao.fk_local}&idProfessor={avaliacao.fk_idProfessor}")
+        
         return render_template("rate_class.html", form=form, turma=turma)
     flash("Você deve estar logado para avaliar uma turma.", category="danger")
     return redirect(url_for("login"))
+
 
 @app.route("/rates/", methods=["GET", "POST"])
 def rates():

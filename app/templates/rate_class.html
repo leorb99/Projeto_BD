@@ -20,16 +20,16 @@
             {{ form.dificuldade.label() }}
             {{ form.dificuldade(class="form-control") }}
             
-            {{ form.nome_professor.label() }}
+            <label for="nome_professor">Nome do(a) professor(a):</label>
             <input class="form-control" type="text" value="{{ turma.professor }}" readonly>
             
-            {{ form.periodo.label() }}
+            <label for="periodo">Período:</label>
             <input class="form-control" type="text" value="{{ turma.periodo }}" readonly>
             
-            {{ form.horario.label() }}
+            <label for="horario">Horário:</label>
             <input class="form-control" type="text" value="{{ turma.horario }}" readonly>
             
-            {{ form.local.label() }}
+            <label for="local">Local:</label>
             <input class="form-control" type="text" value="{{ turma.local }}" readonly>
             <br>
             {{ form.submit(class="btn btn-block btn-primary") }} 
