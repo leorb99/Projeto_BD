@@ -1,99 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Turmas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        form {
-            display: inline-block;
-            text-align: left;
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-        select,
-        input[type="text"],
-        textarea {
-            width: 300px;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-        .submit-button {
-            margin-top: 10px;
-            width: 104%;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #663399;
-            color: white;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        table {
-            margin-left: auto;
-            margin-right: auto;
-            border-collapse: separate;
-            border-spacing: 10px;
-        }
-        .btn-column {
-            text-align: center;
-        }
-        .btn-column a {
-            padding: 5px 10px;
-            font-size: 14px;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #663399;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-column {
-            text-align: center;
-        }
-        .search-form {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .search-form input[type="text"] {
-            width: 300px;
-            padding: 5px;
-        }
-        .search-form button[type="submit"] {
-            padding: 5px 10px;
-            font-size: 14px;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #663399;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
+{% extends 'base.html' %}
+{% block title %}
+    Turmas
+{% endblock %}
+
+{% block content %}
+
 <body>
-    <h1>Turmas</h1>
-    <div class="profile-search">
-        <div class="search-form">
-            <form action="/classes_search" method="GET">
-                <input type="text" name="codigo" placeholder="Digite o código da disciplina">
-                <button type="submit" href="/classes_search/codigo={{ codigo }}">Pesquisar</button>
-            </form>
-        </div>
-        <div id="turmas-list">
-            {% if error %}
-                <p> {{ error }}</p>
-            {% endif %}
-            <h2>{{nome_disciplina}}</h2>
-            <table>
+    <h1 class="text-center h3 mb-3">Turmas</h1>
+    <div class="container">
+        <div>
+            <h2>{{nome_disc}}</h2>
+            <table class="table table-hover table-dark">
                 <thead>
                     <tr>
                         <th>Número</th>
@@ -104,6 +21,8 @@
                         <th>Vagas Ocupadas</th>
                         <th>Vagas Ofertadas</th>
                         <th>Local</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,11 +36,11 @@
                         <td>{{ turma.vagasOcupadas }}</td>
                         <td>{{ turma.totalVagas }}</td>
                         <td>{{ turma.local }}</td>
-                        <td class="btn-column">
-                            <a href="/classes_info/?periodo={{ turma.periodo }}&horario={{ turma.horario }}&local={{ turma.local }}&idProfessor={{ turma.fk_idProfessor }}">Avaliar</a>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="/classes_info/?periodo={{ turma.periodo }}&horario={{ turma.horario }}&local={{ turma.local }}&idProfessor={{ turma.fk_idProfessor }}">Avaliar</a>
                         </td>        
-                        <td class="btn-column">
-                            <a href="/rates/?periodo={{ turma.periodo }}&horario={{ turma.horario }}&local={{ turma.local }}&idProfessor={{ turma.fk_idProfessor }}">Ver Avaliações</a>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="/rates/?periodo={{ turma.periodo }}&horario={{ turma.horario }}&local={{ turma.local }}&idProfessor={{ turma.fk_idProfessor }}">Ver Avaliações</a>
                         </td>        
                     </tr>
                     {% endfor %}
@@ -130,4 +49,4 @@
         </div>
     </div>   
 </body>
-</html>
+{% endblock %}

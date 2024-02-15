@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}
+    Editar Perfil
+{% endblock %}
+
+{% block content %}
+<body>    
+    <div class="container">
+        <h1 class="text-center h3 mb-3">Editar Perfil</h1>
+        <form method="POST" class="edit-profile-form" style="color:whitesmoke" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+
+            {{ form.matricula.label() }}
+            <input class="form-control" type="text" value="{{ user.matricula }}" readonly>
+            
+            {{ form.nome.label() }}
+            {{ form.nome(class="form-control", value=user.nome) }}
+            
+            {{ form.email.label() }}
+            {{ form.email(class="form-control", value=user.email) }}
+            
+            {{ form.curso.label() }}
+            <select class="form-control" name="curso">
+                {% for curso in form.curso.choices %}
+                    <option selected>{{ curso }}</option>
+                {% endfor %}
+                <option selected>{{ user.curso }}</option>
+            </select>
+
+            <div>
+                <label for="foto_atual"></label>
+                <img src="data:image/png;base64,{{ base64_data }}" alt="Foto do usuário">
+            </div>
+            {{ form.foto(class="form-control") }}
+            <br>
+       
+            {{ form.submit(class="btn btn-block btn-primary") }}
+            <br>
+            <br>
+            {{ form.delete(class="btn btn-block btn-danger") }}
+        </form>
+    </div>
+</body>
+{% endblock %}

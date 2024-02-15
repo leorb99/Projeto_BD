@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Avalia UnB</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .button-container a {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-right: 10px;
-            text-decoration: none;
-            color: #fff;
-            background-color: #663399;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h1>Avalia UnB</h1>
-    <div class="button-container">
-        <a href="/login">Login</a>
-        <a href="/signup">Signup</a>
-    </div>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    Avalia UnB
+{% endblock %}

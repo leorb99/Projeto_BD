@@ -46,6 +46,19 @@ class UsuarioDAO():
             return usuario
         except Error as ex:
             print("Falha ao localizar dados na tabela usuários: ", ex)
+    
+    def get_email(self, cursor, email):
+        sql = "SELECT * FROM usuario WHERE email=%s;"
+        try:
+            cursor.execute(sql, (email,))
+            result = cursor.fetchone()
+            if result != None:
+                usuario = usuarios.Usuario(*result)
+                return usuario
+            usuario = None
+            return usuario
+        except Error as ex:
+            print("Falha ao localizar dados na tabela usuários: ", ex)
 
     def getAll(self, cursor):
         sql = "SELECT * FROM usuario;"

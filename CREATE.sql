@@ -93,7 +93,9 @@ CREATE TABLE denuncia(
 );
 
 -- view
-CREATE VIEW vw_avaliacoesDisciplina AS
+-- Active: 1689032669311@@127.0.0.1@3306@AvaliaUnB
+CREATE VIEW view_turmas_avaliadas
+AS
 SELECT professor.nome AS nome, 
        avaliacao.nota AS nota,
        disciplina.nome AS nome_disciplina,
@@ -103,8 +105,6 @@ SELECT professor.nome AS nome,
 FROM turma
 INNER JOIN disciplina ON turma.fk_codDisciplina = disciplina.codigo
 INNER JOIN avaliacao ON turma.fk_idProfessor = avaliacao.fk_idProfessor
-AND turma.periodo = avaliacao.fk_periodo AND turma.local = avaliacao.fk_local
-AND turma.horario = avaliacao.fk_horario
 INNER JOIN professor ON turma.fk_idProfessor = professor.idProfessor;
 
 -- procedure

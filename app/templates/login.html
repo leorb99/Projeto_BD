@@ -1,64 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .form {
-            max-width: 350px;
-            margin: 0 auto;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 5px;
-        }
-        .form-group .submit-button {
-            margin-top: 10px;
-            width: 104%;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #663399;
-            color: white;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;   
-        }
-    </style>
-</head>
-<body>
-    <h1>Login</h1>
-    <div class="form">
-        {% if error %}
-            <p>{{ error }}</p>
-        {% endif %}
-        <form action="/login" method="POST">
-            <div class="form-group">
-                <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" required>
-            </div>
-            <div class="form-group">
-                <label for="senha">Senha:</label>
-                <input type="password" id="senha" name="senha" required>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="submit-button">
-            </div>
+{% extends 'base.html' %}
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+<body class="text-center">    
+    <div class="container">
+        <h1 class="h3 mb-3">Login</h1>
+        <form method="POST" class="login-form" style="color:whitesmoke">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+
+            {{ form.matricula.label() }}
+            {{ form.matricula(class="form-control", placeholder="Matrícula") }}
+            
+            {{ form.senha.label() }}
+            {{ form.senha(class="form-control", placeholder="Senha") }}
+            <br>
+            <div class="checkbox mb-3">
+                <h6>Não tem uma conta?</h6>
+                <a class="btn btn-sm btn-secondary" href="{{ url_for('signup') }}">Criar Conta</a>
+             </div>
+            {{ form.submit(class="btn btn-block btn-primary") }}
         </form>
     </div>
 </body>
-</html>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+    Editar Avaliação
+{% endblock %}
+
+{% block content %} 
+<body>    
+    <div class="container">
+        <h1 class="text-center h3 mb-3">Editar Avaliação</h1>
+        <form method="POST" style="color:whitesmoke">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+
+            {{ form.comentario.label() }}
+            {{ form.comentario(class="form-control", placeholder="Escreva um comentário sobre a turma (opcional)") }}
+            
+            {{ form.nota.label() }}
+            {{ form.nota(class="form-control") }}
+            
+            {{ form.dificuldade.label() }}
+            {{ form.dificuldade(class="form-control") }}
+            <br>
+            {{ form.submit(class="btn btn-block btn-primary") }} 
+        </form>
+    </div>
+</body>
+{% endblock %}

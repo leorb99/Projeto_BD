@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+    Adicionar Turma
+{% endblock %}
+
+{% block content %} 
+<body>    
+    <div class="container">
+        <h1 class="text-center h3 mb-3">Adicionar Turma</h1>
+        <form method="POST" class="add-class" style="color:whitesmoke">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+
+            {{ form.periodo.label() }}
+            {{ form.periodo(class="form-control", placeholder="Período") }}
+            
+            {{ form.horario.label() }}
+            {{ form.horario(class="form-control", placeholder="Horário") }}
+            
+            {{ form.local.label() }}
+            {{ form.local(class="form-control", placeholder="Local") }}
+            
+            {{ form.numero.label() }}
+            {{ form.numero(class="form-control", placeholder="Número da Turma") }}
+            
+            {{ form.professor.label() }}
+            {{ form.professor(class="form-control", placeholder="Nome do(a) Professor(a)") }}
+            
+            {{ form.cod_disciplina.label() }}
+            {{ form.cod_disciplina(class="form-control", placeholder="Códido da Disciplina") }}
+            <br>
+            {{ form.submit(class="btn btn-block btn-primary") }} 
+        </form>
+    </div>
+</body>
+{% endblock %}

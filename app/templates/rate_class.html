@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+    Avaliar Turma
+{% endblock %}
+
+{% block content %} 
+<body>    
+    <div class="container">
+        <h1 class="text-center h3 mb-3">Avaliar Turma</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+
+            {{ form.comentario.label() }}
+            {{ form.comentario(class="form-control", placeholder="Escreva um comentário sobre a turma (opcional)") }}
+            
+            {{ form.nota.label() }}
+            {{ form.nota(class="form-control") }}
+            
+            {{ form.dificuldade.label() }}
+            {{ form.dificuldade(class="form-control") }}
+            
+            {{ form.nome_professor.label() }}
+            <input class="form-control" type="text" value="{{ turma.professor }}" readonly>
+            
+            {{ form.periodo.label() }}
+            <input class="form-control" type="text" value="{{ turma.periodo }}" readonly>
+            
+            {{ form.horario.label() }}
+            <input class="form-control" type="text" value="{{ turma.horario }}" readonly>
+            
+            {{ form.local.label() }}
+            <input class="form-control" type="text" value="{{ turma.local }}" readonly>
+            <br>
+            {{ form.submit(class="btn btn-block btn-primary") }} 
+        </form>
+    </div>
+</body>
+{% endblock %}

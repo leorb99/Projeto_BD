@@ -1,86 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cadastro</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 5px;
-        }
-        .form-group .submit-button {
-            margin-top: 10px;
-            width: 104%;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #663399;
-            color: white;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h1>Cadastro</h1>
-    <div class="form">
-        <form action="/signup" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="matricula">Matrícula:</label>
-                <input type="text" id="matricula" name="matricula" required>
+{% extends 'base.html' %}
+{% block title %}
+    Signup
+{% endblock %}
+
+{% block content %}
+<body class="text-center">    
+    <div class="container">
+        <h1 class="h3 mb-3">Cadastro</h1>
+        <form method="POST" class="signup-form" style="color:whitesmoke" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+
+            {{ form.matricula.label() }}
+            {{ form.matricula(class="form-control", placeholder="Matrícula") }}
+            
+            {{ form.nome.label() }}
+            {{ form.nome(class="form-control", placeholder="Nome") }}
+            
+            {{ form.email.label() }}
+            {{ form.email(class="form-control", placeholder="Email") }}
+            
+            {{ form.senha.label() }}
+            {{ form.senha(class="form-control", placeholder="Senha") }}
+            
+            {{ form.senha_confirmada.label() }}
+            {{ form.senha_confirmada(class="form-control", placeholder="Confirmar Senha") }}
+            
+            {{ form.curso.label() }}
+            {{ form.curso(class="form-control",) }}
+            
+            {{ form.data_nascimento.label() }}
+            {{ form.data_nascimento(class="form-control") }}
+            
+            {{ form.foto.label() }}
+            {{ form.foto(class="form-control") }}
+            <br>
+            <div class="checkbox mb-3">
+                <h6>Já tem uma conta?</h6>
+                <a class="btn btn-sm btn-secondary" href="{{ url_for('login') }}">Login</a>
             </div>
-            <div class="form-group">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="senha">Senha:</label>
-                <input type="password" id="senha" name="senha" required>
-            </div>
-            <div class="form-group">
-                <label for="curso">Curso:</label>
-                <input type="text" id="curso" name="curso" required>
-            </div>
-            <div class="form-group">
-                <label for="privilegio">Privilégio:</label>
-                <input id="privilegio" name="privilegio" value="COMUM"readonly required>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="dataNascimento">Data de Nascimento:</label>
-                <input type="date" id="dataNascimento" name="dataNascimento" required>
-            </div>
-            <div class="form-group">
-                <label for="foto">Foto:</label>
-                <input type="file" id="foto" name="foto" accept="image/*">
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Cadastrar" class="submit-button">
-            </div>
+            {{ form.submit(class="btn btn-block btn-primary") }}
         </form>
     </div>
 </body>
-</html>
+{% endblock %}

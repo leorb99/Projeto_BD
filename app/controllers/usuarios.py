@@ -1,6 +1,12 @@
 from app.models import usuario_dao, cursor
+from app import bcrypt, login_manager
+from flask_login import UserMixin
 
-class Usuario():
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.get_id(user_id)
+
+class Usuario(UserMixin):
     def __init__(self, matricula=None, nome=None, email=None, senha=None,
                  curso=None, privilegio=None, dataNascimento=None, 
                  idade=None, foto=None):
@@ -13,14 +19,20 @@ class Usuario():
         self.dataNascimento = dataNascimento
         self.idade = idade
         self.foto = foto
-        self.usr_dao = usuario_dao.UsuarioDAO()
+        self.usr_dao = usuario_dao.UsuarioDAO()  
 
-    def valida_senha(self, matricula, senha):
-        self.usr_dao = usuario_dao.UsuarioDAO()
-        senha_correta = self.usr_dao.getPassword(cursor, matricula)
-        return (senha == senha_correta[0]) if senha_correta else None
+    def valida_senha(self, senha):
+        return bcrypt.check_password_hash(self.senha, senha)
+    
+    def get_id(self):
+        return self
     
     def get_usr(self, matricula):
         self.usr_dao = usuario_dao.UsuarioDAO()
         Usuario = self.usr_dao.get(cursor, matricula)
+        return Usuario
+
+    def get_usr_email(self, email):
+        self.usr_dao = usuario_dao.UsuarioDAO()
+        Usuario = self.usr_dao.get_email(cursor, email)
         return Usuario
