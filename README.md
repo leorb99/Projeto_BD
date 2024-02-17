@@ -1,6 +1,26 @@
 # Projeto individual da disciplina Bancos de Dados 2023/1
 O projeto foi desenvolvido em python usando o framework Flask.
 
+![Alt text](images/screenshots/login.png "Tela de Login")
+
+![Alt text](images/screenshots/signup.png "Tela de Registro")
+
+![Alt text](images/screenshots/profile.png "Tela de Perfil")
+
+![Alt text](images/screenshots/profile_adm.png "Tela de Perfil do ADM")
+
+![Alt text](images/screenshots/edit_profile.png "Tela de Edição do Perfil")
+
+![Alt text](images/screenshots/classes.png "Tela de Pesquisa por Turmas")
+
+![Alt text](images/screenshots/review.png "Tela para Avaliar Turma")
+
+![Alt text](images/screenshots/reviews.png "Tela com Avaliações de uma Turma")
+
+![Alt text](images/screenshots/edit_review.png "Tela de Edição da Avaliação")
+
+![Alt text](images/screenshots/view.png "Tela com Turmas Avaliadas")
+
 ## Setup do ambiente
 
 É necessário alguns procedimentos antes de rodar o programa.
