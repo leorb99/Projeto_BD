@@ -1,43 +1,49 @@
 {% extends 'base.html' %}
 {% block title %}
-    Signup
+    Reviews
 {% endblock %}
 
 {% block content %}
 <body>
     <h1 class="text-center h3 mb-3">Avaliações da turma</h1>
     {% for avaliacao in avaliacoes %}
-        <div class="card container card-body">
-            <p>
-                <strong>Comentário:</strong> {{ avaliacao.comentario }}
-            </p>
+        <div class="card container card-body mb-3">
+            {% if avaliacao.comentario %}
+                <p>
+                    <strong>Comentário:</strong> {{ avaliacao.comentario }}
+                </p>
+            {% endif %}
+            
             <p>
                 <strong>Nota:</strong> {{ avaliacao.nota }}
             </p>
+            
             <p>
                 <strong>Dificuldade:</strong> {{ avaliacao.dificuldade }}
             </p>
+            
             <p>
                 <strong>Professor:</strong> {{ avaliacao.professor }}
             </p>
+            
             <p>
                 <strong>Disciplina:</strong> {{ avaliacao.disciplina }}
             </p>
-            {% if session["privilegio"] == "COMUM" and session["logged_in"] and session["user_id"] != avaliacao.fk_matricula %}
-                <button class="btn btn-primary btn-sm" onclick="toggleMotivoDenuncia({{ avaliacao.id }})">Denunciar</button>
-                <br>
-                <div id="form-denuncia-{{ avaliacao.id }}" style="display: none;">
-                    <form action="/denounce" method="POST">
-                        <textarea name="motivo" class="form-control" placeholder="Digite o motivo da denúncia"></textarea>
-                        <input type="hidden" name="id" value="{{ avaliacao.id }}">
-                        <input type="hidden" name="comentario" value="{{ avaliacao.comentario }}">
-                        <br>
-                        <button class="btn btn-danger" type="submit">Enviar Denúncia</button>
-                    </form>
-                </div>
+            
+            {% if session["logged_in"] %}
+                {% if session["privilegio"] == "COMUM" and session["user_id"] != avaliacao.fk_matricula %}
+                    <button class="btn btn-primary btn-sm mb-3" onclick="toggleMotivoDenuncia({{ avaliacao.id }})">Denunciar</button>
+                    <div id="form-denuncia-{{ avaliacao.id }}" style="display: none;">
+                        <form action="/denounce" method="POST">
+                            <textarea name="motivo" class="form-control" placeholder="Digite o motivo da denúncia"></textarea>
+                            <input type="hidden" name="id" value="{{ avaliacao.id }}">
+                            <input type="hidden" name="comentario" value="{{ avaliacao.comentario }}">
+                            <button class="btn btn-danger btn-sm mt-3" type="submit">Enviar Denúncia</button>
+                        </form>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
-        <br>
     {% endfor %}
 
     <script>

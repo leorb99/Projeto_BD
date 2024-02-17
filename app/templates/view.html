@@ -4,12 +4,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center h3 mb-3">Turmas com avaliação</h1>
+    <h1 class="text-center h3 mb-3">Turmas Avaliadas</h1>
     <table class="table table-hover table-dark">
         <thead>
             <tr>
-                <th scope="col">Nome</th>
-                <th scope="col">Nota</th>
+                <th scope="col">Professor(a)</th>
                 <th scope="col">Nome da Disciplina</th>
                 <th scope="col">Horário</th>
                 <th scope="col">Local</th>
@@ -22,30 +21,14 @@
                 <tr>
                     <td>{{ row[0].title() }}</td>
                     <td>{{ row[1].title() }}</td>
-                    <td>{{ row[2].title() }}</td>
+                    <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
-                    <td>{{ row[5] }}</td>
-                    <td>
-                        <a class="btn btn-outline btn-info">Ver avaliação</a>
+					<td>
+                        <a class="btn btn-sm btn-outline btn-info" href="/rates/?periodo={{ row[6] }}&horario={{ row[2] }}&local={{ row[3] }}&idProfessor={{ row[5] }}">Ver avaliações</a>
                     </td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <nav aria-label="pagination">
-        <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="bg-dark page-link" href="?page={{ page - 1 }}">Previous</a></li>
-        {% if total_results > per_page %}
-            {% if page > 1 %}
-                {% for i in range(page + 1) %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page + i}}">{{ i + 1 }}</a></li>
                 {% endfor %}
-            {% endif %}
-        {% endif %}
-        {% if total_results > page * per_page %}
-            <li class="page-item"><a class="bg-dark page-link" href="?page={{ page + 1 }}">Next</a></li>
-        {% endif %}
-        </ul>
-    </nav>
+			</tbody>
+		</table>
 {% endblock %}

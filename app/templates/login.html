@@ -15,8 +15,7 @@
             {{ form.matricula(class="form-control", placeholder="Matrícula") }}
             
             {{ form.senha.label() }}
-            {{ form.senha(class="form-control", placeholder="Senha") }}
-            <br>
+            {{ form.senha(class="form-control mb-3", placeholder="Senha") }}
             <div class="checkbox mb-3 text-center">
                 <h6>Não tem uma conta?</h6>
                 <a class="btn btn-sm btn-secondary" href="{{ url_for('signup') }}">Criar Conta</a>

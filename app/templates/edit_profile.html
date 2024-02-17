@@ -32,13 +32,10 @@
                 <label for="foto_atual"></label>
                 <img src="data:image/png;base64,{{ base64_data }}" alt="Foto do usuário">
             </div>
-            {{ form.foto(class="form-control") }}
-            <br>
+            {{ form.foto(class="form-control mb-3") }}
        
-            {{ form.submit(class="btn btn-block btn-primary") }}
-            <br>
-            <br>
-            {{ form.delete(class="btn btn-block btn-danger") }}
+            {{ form.submit(class="btn btn-block btn-primary mb-3") }}
+            {{ form.delete(class="btn btn-block btn-danger mb-3") }}
         </form>
     </div>
 </body>

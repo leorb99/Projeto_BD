@@ -28,9 +28,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('view') }}">Turmas Avaliadas</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('add_class') }}">Adicionar Turma</a>
-                        </li>
                     </ul>
                     <form class="d-flex" method="GET" action="/classes_search">
                         <input class="form-control me-2" name="codigo" type="search" placeholder="Código da Disciplina" aria-label="Search" style="color: white">
@@ -58,9 +55,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('view') }}">Turmas Avaliadas</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('add_class') }}">Adicionar Turma</a>
-                        </li>
                     </ul>
                     <form class="d-flex" method="GET" action="/classes_search">
                         <input class="form-control me-2" name="codigo" type="search" placeholder="Código da Disciplina" aria-label="Search" style="color: white">
@@ -78,6 +72,7 @@
                 {% endif %}
         </div>
     </nav>
+    <div class="mt-3"></div>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, msg in messages%}
@@ -112,14 +107,16 @@
     background-color: #212529;
     color: white
     }
-    .btn-primary
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active
     {
         background-color: #663399 !important;
         border-color: #663399;
     }
     .card {
-    background-color: rgba(0, 0, 0, 0.4);
+        background-color: rgba(0, 0, 0, 0.4);
     }
-    
 </style>
 </html>

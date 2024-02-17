@@ -110,15 +110,6 @@ class SignupForm(FlaskForm):
     foto = FileField(label="Foto:")
     submit = SubmitField(label="Cadastrar")
     
-class AddClass(FlaskForm):
-    periodo = StringField(label="Período:", validators=[DataRequired()])
-    horario = StringField(label="Horário:", validators=[DataRequired()])
-    local = StringField(label="Local:", validators=[DataRequired()])
-    numero = StringField(label="Número:", validators=[DataRequired()])
-    professor = StringField(label="Nome do(a) Professor(a):", validators=[DataRequired()])
-    cod_disciplina = StringField(label="Código da Disciplina:", validators=[DataRequired()])
-    submit = SubmitField(label="Adicionar Turma")
-    
 class RateClass(FlaskForm):
     comentario = TextAreaField(label="Comentário:")
     nota = SelectField(label="Nota:", choices=notas, validators=[DataRequired()])

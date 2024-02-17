@@ -6,7 +6,6 @@
 {% block content %}
 <body>
     <div class="container">
-        <br>
         <div class="form-group">
             <label for="foto"></label>
             <img src="data:image/png;base64,{{ base64_data }}" alt="Foto do usuário">
@@ -36,7 +35,7 @@
     {% if denuncias and session["privilegio"] == "ADM" %}
         <h1 class="text-center h3 mb-3">Denúncias</h1>
         {% for denuncia in denuncias %}
-            <div class="card container card-body">
+            <div class="card container card-body mb-3">
                 {% if denuncia.motivo == None or denuncia.motivo == "" %}
                 {% else %}
                     <p>
@@ -62,18 +61,18 @@
                     <a class="btn btn-primary" id="ignore-opt" href="/ignore_report/denuncia_id={{ denuncia.idDenuncia }}">Ignorar Denúncia</a>
                 </div>
             </div>
-            <br>
         {% endfor %}
     {% endif %}
-    <br>
     
     {% if avaliacoes %}
         <h1 class="text-center h3 mb-3">Minhas Avaliações</h1>
         {% for avaliacao in avaliacoes %}
-            <div class="card container card-body">
-                <p>
-                    <strong>Comentário:</strong> {{ avaliacao.comentario }}
-                </p>
+            <div class="card container card-body mb-3">
+                {% if avaliacao.comentario %}
+                    <p>
+                        <strong>Comentário:</strong> {{ avaliacao.comentario }}
+                    </p>
+                {% endif %}
         
                 <p>
                     <strong>Nota:</strong> {{ avaliacao.nota }}
@@ -100,7 +99,6 @@
                     <a class="btn btn-danger" href="/delete_comment/rate_id={{ avaliacao.id }}">Excluir Avaliação</a>
                 </div>
             </div>
-            <br>
             {% endfor %}
         {% endif %}
 </body>

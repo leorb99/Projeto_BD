@@ -1,7 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
 import os
-import csv
 import time
 import pickle
 
@@ -49,19 +48,6 @@ try:
             profs_disc = pickle.load(pf)
         with open(path_turmas_dict, "rb") as pf:
             turmas_dict = pickle.load(pf)
-        
-        # with open("dep.pk1", "wb") as pf:
-        #     pickle.dump(dep, pf)
-        # with open("disc.pk1", "wb") as pf:
-        #     pickle.dump(disc, pf)
-        # with open("profs.pk1", "wb") as pf:
-        #     pickle.dump(profs, pf)
-        # with open("deps_prof.pk1", "wb") as pf:
-        #     pickle.dump(deps_prof, pf)
-        # with open("profs_disc.pk1", "wb") as pf:
-        #     pickle.dump(profs_disc, pf)
-        # with open("turmas.pk1", "wb") as pf:
-        #     pickle.dump(turmas_dict, pf)
         
         print("Inserindo dados na tabela departamento")
         for d in dep.items():

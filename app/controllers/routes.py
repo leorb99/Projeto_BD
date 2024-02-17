@@ -2,9 +2,8 @@ import base64
 import os
 from app import app, bcrypt
 from flask import render_template, request, redirect, url_for, flash, session
-from .forms import SignupForm, AddClass, LoginForm, EditProfile, EditRate, RateClass
-from . import avaliacoes, denuncias
-from . import turmas, usuarios
+from .forms import SignupForm, LoginForm, EditProfile, EditRate, RateClass
+from . import avaliacoes, denuncias, turmas, usuarios 
 from app.models import cursor, avaliacao_dao, usuario_dao, view_dao
 from app.models import denuncia_dao, turma_dao
 
@@ -15,8 +14,6 @@ def convertImageToBinary(img):
     return binary
 
 foto = convertImageToBinary("/../../images/generic_user.png")
-user = usuarios.Usuario()
-rate = avaliacoes.Avaliacao()
 
 
 def logged_in(user):
@@ -101,7 +98,7 @@ def profile():
             den.setAvaliacao()
             den.setDenunciado()
 
-    user_logged = user.get_usr(matricula=session["user_id"])
+    user_logged = usuarios.Usuario().get_usr(matricula=session["user_id"])
     avaliacao = avaliacao_dao.AvaliacaoDAO()
     avaliacoes = avaliacao.getMy(cursor, user_logged.matricula)
     
@@ -161,7 +158,6 @@ def delete_comment(fk_idAvaliacao):
     return redirect("/profile")    
 
 
-@app.route("/classes_search/codigo=<string:cod>")
 @app.route("/classes_search/")
 def classes_search():
     cod_disciplina = request.args.get("codigo")
@@ -183,41 +179,20 @@ def classes_search():
 def rate_class():
     form = RateClass()
     return render_template("rate_class.html", form=form)
-    # if request.method == "POST":
-    #     info = request.form
-    #     avaliacao = avaliacoes.Avaliacao(
-    #         id=None, comentario=info["comentario"], nota=info["nota"],
-    #         dificuldade=info["dificuldade"], fk_matricula=user.matricula, 
-    #         fk_periodo=info["periodo"], fk_local=info["local"], fk_horario=info["horario"]
-    #     )
-    #     avaliacao.professor = info["professor"]
-    #     avaliacao.setIDProfessor()
-    #     create_rate = avaliacao_dao.AvaliacaoDAO()
-    #     create_rate.create(cursor, avaliacao)
-    #     if user.privilegio == "ADM":
-    #         return redirect("/profile_adm")
-    #     return redirect("/profile")
-    # return render_template("classes_rate.html")
 
 
 @app.route("/classes/rate/update/rate_id=<int:id>", methods=["GET", "POST"])
 def classes_rate_update(id):
-    update_rate = avaliacao_dao.AvaliacaoDAO()
-    avaliacao = update_rate.get(cursor, id)
-    return render_template("edit_rate.html", avaliacao=avaliacao)
-
-
-@app.route("/update_rate/rateid=<int:id>", methods=["GET", "POST"])
-def edit_rate(id):
-    info = request.form
-    update_rate = avaliacao_dao.AvaliacaoDAO()
-    avaliacao = avaliacoes.Avaliacao()
-    avaliacao.comentario = info["comentario"]
-    avaliacao.nota = info["nota"]
-    avaliacao.dificuldade = info["dificuldade"]
-    avaliacao.id = id
-    update_rate.update(cursor, avaliacao)
-    return redirect("/profile")
+    form = EditRate()
+    if form.validate_on_submit():
+        review = avaliacao_dao.AvaliacaoDAO().get(cursor, id)
+        review.comentario = form.comentario.data
+        review.nota = form.nota.data
+        review.dificuldade = form.dificuldade.data
+        avaliacao_dao.AvaliacaoDAO().update(cursor, review)
+        flash("Avaliação atualizada.", category="success")
+        return redirect(url_for("profile"))
+    return render_template("edit_rate.html", form=form)
 
 
 @app.route("/classes_info/", methods=["GET", "POST"])
@@ -262,7 +237,7 @@ def rates():
     for rate in rates:
         rate.setDisciplina()
         rate.setProfessor()
-    return render_template("rates.html", avaliacoes=rates, privilegio=user.privilegio)
+    return render_template("rates.html", avaliacoes=rates)
 
 
 @app.route("/denounce", methods=["GET", "POST"])
@@ -278,28 +253,10 @@ def denounce():
     flash("Denúncia recebida.", category="info")
     return redirect(f"/rates/?periodo={avaliacao.fk_periodo}&horario={avaliacao.fk_horario}&local={avaliacao.fk_local}&idProfessor={avaliacao.fk_idProfessor}")
 
-@app.route("/classes/update")
-def classes_update(): # estudante cria, mas n remove nem edita
-    return render_template("classe_update.html")
-
-
-@app.route("/classes/add", methods=["GET", "POST"])
-def add_class():
-    if is_logged_in():
-        form = AddClass()
-        return render_template("add_class.html", form=form)
-    flash("Você deve estar logado para adicionar uma turma.", category="danger")
-    return redirect(url_for("login"))
-
 
 @app.route("/view")
 def view():
     result = view_dao.View()
-    # results = result.view(cursor)
-    page = request.args.get('page', 1, type=int)
-    per_page = 10
+    results= result.view(cursor)
 
-    results, total_results = result.view_pages(cursor, page, per_page)
-
-    return render_template("view.html", results=results, total_results=total_results,
-                           page=page, per_page=per_page)
+    return render_template("view.html", results=results)

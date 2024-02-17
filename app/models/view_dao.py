@@ -3,7 +3,7 @@ from mysql.connector import Error
 
 class View():
     def view(self, cursor):
-        sql = "SELECT * FROM view_turmas_avaliadas"
+        sql = "SELECT * FROM vw_avaliacoesDisciplina"
         try:
             cursor.execute(sql)
             result = cursor.fetchall()
