@@ -36,14 +36,21 @@ def manual_logout():
 def is_logged_in():
     return session.get("logged_in", False)
 
+def is_admin():
+    return session["privilegio"] == "ADM"
+
 
 @app.route("/")
 def index():
+    if is_logged_in():
+        return redirect(url_for("profile"))
     return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if is_logged_in():
+        return redirect(url_for("profile"))
     form = LoginForm()
     if form.validate_on_submit():
         user = usuarios.Usuario().get_usr(matricula=form.matricula.data)
@@ -57,6 +64,8 @@ def login():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    if is_logged_in():
+        return redirect(url_for("profile"))
     form = SignupForm()
     if form.validate_on_submit():
         foto_bin = convertImageToBinary("/../../images/generic_user.png")
@@ -90,6 +99,9 @@ def logout():
 
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+    if not is_logged_in():
+        return redirect(url_for("index"))
+    
     denuncias = []
     if session["privilegio"] == "ADM":
         denuncia = denuncia_dao.DenunciaDAO()
@@ -113,6 +125,9 @@ def profile():
 
 @app.route("/edit_profile", methods=["GET", "POST"])
 def edit_profile():
+    if not is_logged_in():
+        return redirect(url_for("index"))
+    
     form = EditProfile()
     user_logged = usuarios.Usuario().get_usr(matricula=session["user_id"])
     base64_data = base64.b64encode(user_logged.foto).decode('utf-8')
@@ -140,12 +155,20 @@ def edit_profile():
 
 @app.route("/delete_account/user_denounced=<int:user_denounced>", methods=["POST", "GET"])
 def delete_account(user_denounced):
+    if not is_logged_in():
+        return redirect(url_for("index"))
+    elif not is_admin() and session["user_id"] != user_denounced:
+        return redirect(url_for("profile"))
     usuario_dao.UsuarioDAO().delete(cursor, user_denounced)
     return redirect(url_for("profile"))
 
 
 @app.route("/ignore_report/denuncia_id=<int:denuncia_id>", methods=["POST", "GET"])
 def ignore_report(denuncia_id):
+    if not is_logged_in():
+        return redirect(url_for("index"))
+    elif not is_admin():
+        return redirect(url_for("profile"))
     denuncia = {"avaliado": "AVALIADA", "idDenuncia": denuncia_id}
     update_denuncia = denuncia_dao.DenunciaDAO()
     update_denuncia.update(cursor, denuncia)
@@ -153,9 +176,11 @@ def ignore_report(denuncia_id):
 
 @app.route("/delete_comment/rate_id=<int:fk_idAvaliacao>", methods=["POST", "GET"])
 def delete_comment(fk_idAvaliacao):
+    if not is_logged_in():
+        return redirect(url_for("index"))
     delete_rate = avaliacao_dao.AvaliacaoDAO()
     delete_rate.delete(cursor, fk_idAvaliacao)
-    return redirect("/profile")    
+    return redirect(url_for("profile"))    
 
 
 @app.route("/classes_search/")
@@ -175,14 +200,10 @@ def classes_search():
     return render_template("classes.html")
 
 
-@app.route("/rate_class/", methods=["POST"])
-def rate_class():
-    form = RateClass()
-    return render_template("rate_class.html", form=form)
-
-
 @app.route("/classes/rate/update/rate_id=<int:id>", methods=["GET", "POST"])
 def classes_rate_update(id):
+    if not is_logged_in():
+        return redirect(url_for("index"))
     form = EditRate()
     if form.validate_on_submit():
         review = avaliacao_dao.AvaliacaoDAO().get(cursor, id)
@@ -192,7 +213,8 @@ def classes_rate_update(id):
         avaliacao_dao.AvaliacaoDAO().update(cursor, review)
         flash("Avaliação atualizada.", category="success")
         return redirect(url_for("profile"))
-    return render_template("edit_rate.html", form=form)
+    review = avaliacao_dao.AvaliacaoDAO().get(cursor, id)
+    return render_template("edit_rate.html", form=form, review=review)
 
 
 @app.route("/classes_info/", methods=["GET", "POST"])

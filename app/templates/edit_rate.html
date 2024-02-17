@@ -12,8 +12,12 @@
             {{ form.csrf_token }}
 
             {{ form.comentario.label() }}
-            {{ form.comentario(class="form-control", placeholder="Escreva um comentário sobre a turma (opcional)") }}
-            
+            {% if not review.comentario %}
+                {{ form.comentario(class="form-control", placeholder="Escreva um comentário sobre a turma (opcional)") }}
+            {% else %}                
+                {{ form.comentario(class="form-control", placeholder=review.comentario) }}
+            {% endif %}
+
             {{ form.nota.label() }}
             {{ form.nota(class="form-control") }}
             
